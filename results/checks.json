@@ -1,0 +1,86 @@
+{
+  "βασική": {
+    "rtol": 1e-12,
+    "atol": 1e-14,
+    "max_step": 0.01,
+    "A": {
+      "relative_energy_drift": 1.1261178379046275e-10,
+      "absolute_momentum_drift": 6.48309409388569e-14,
+      "absolute_angular_momentum_drift": 1.9960921804340614e-11,
+      "com_drift": 2.6359485083463524e-14,
+      "sampled_min_separation": 0.008518490725972504,
+      "nfev": 31406,
+      "accepted_steps": 2044
+    },
+    "B": {
+      "relative_energy_drift": 1.018538698671744e-10,
+      "absolute_momentum_drift": 8.788928253162695e-14,
+      "absolute_angular_momentum_drift": 1.9666046569000173e-11,
+      "com_drift": 6.094108694560433e-14,
+      "sampled_min_separation": 0.008518585965118893,
+      "nfev": 31406,
+      "accepted_steps": 2044
+    }
+  },
+  "αυστηρή": {
+    "rtol": 1e-13,
+    "atol": 1e-15,
+    "max_step": 0.005,
+    "A": {
+      "relative_energy_drift": 1.6192335725393856e-11,
+      "absolute_momentum_drift": 9.79818208472353e-14,
+      "absolute_angular_momentum_drift": 2.6574298317427747e-12,
+      "com_drift": 6.136913917022971e-14,
+      "sampled_min_separation": 0.008516943561100616,
+      "nfev": 55844,
+      "accepted_steps": 3694
+    },
+    "B": {
+      "relative_energy_drift": 1.3328915436495478e-11,
+      "absolute_momentum_drift": 1.4959941136622197e-13,
+      "absolute_angular_momentum_drift": 2.533084852984757e-12,
+      "com_drift": 9.826074684775323e-14,
+      "sampled_min_separation": 0.008517031689950832,
+      "nfev": 55844,
+      "accepted_steps": 3694
+    }
+  },
+  "αναφοράς": {
+    "rtol": 3e-14,
+    "atol": 3e-16,
+    "max_step": 0.0025,
+    "A": {
+      "relative_energy_drift": 8.45804570724887e-12,
+      "absolute_momentum_drift": 1.0048591735576161e-13,
+      "absolute_angular_momentum_drift": 3.9523939676655573e-13,
+      "com_drift": 6.534412876621462e-14,
+      "sampled_min_separation": 0.008517265255394809,
+      "nfev": 102626,
+      "accepted_steps": 6820
+    },
+    "B": {
+      "relative_energy_drift": 1.0940050026664595e-11,
+      "absolute_momentum_drift": 6.703246762680666e-14,
+      "absolute_angular_momentum_drift": 4.4586556668946287e-13,
+      "com_drift": 3.9500287517334635e-14,
+      "sampled_min_separation": 0.008517373369837641,
+      "nfev": 102626,
+      "accepted_steps": 6820
+    }
+  },
+  "comparison": {
+    "initial_distance": 6.614378276907522e-07,
+    "final_distance": 1.0873356951957229e-05,
+    "amplification": 16.438970522624757,
+    "max_base_reference": 5.76804389576308e-09,
+    "max_strict_reference": 1.3533864871569394e-09,
+    "min_signal_to_convergence_difference": 289.55892189282486
+  },
+  "passed": true,
+  "versions": {
+    "python": "3.14.4",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.2"
+  }
+}

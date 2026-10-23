@@ -1,0 +1,52 @@
+{
+  "lagrange_stable": {
+    "frames_tested": 180,
+    "default_frames": 180,
+    "interval_ms": 180,
+    "bytes": 10814577,
+    "physical_start": 0.0,
+    "physical_end": 30.0,
+    "full_html_in_package": true,
+    "browser_javascript_tested": false
+  },
+  "lagrange_equal": {
+    "frames_tested": 6,
+    "default_frames": 180,
+    "interval_ms": 180,
+    "bytes": 347980,
+    "physical_start": 0.0,
+    "physical_end": 10.0,
+    "full_html_in_package": false,
+    "browser_javascript_tested": false
+  },
+  "euler": {
+    "frames_tested": 6,
+    "default_frames": 180,
+    "interval_ms": 180,
+    "bytes": 342218,
+    "physical_start": 0.0,
+    "physical_end": 6.0,
+    "full_html_in_package": false,
+    "browser_javascript_tested": false
+  },
+  "at_rest": {
+    "frames_tested": 6,
+    "default_frames": 180,
+    "interval_ms": 180,
+    "bytes": 308748,
+    "physical_start": 0.0,
+    "physical_end": 1.4,
+    "full_html_in_package": false,
+    "browser_javascript_tested": false
+  },
+  "burrau": {
+    "frames_tested": 6,
+    "default_frames": 180,
+    "interval_ms": 180,
+    "bytes": 366018,
+    "physical_start": 0.0,
+    "physical_end": 15.8,
+    "full_html_in_package": false,
+    "browser_javascript_tested": false
+  }
+}

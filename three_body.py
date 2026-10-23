@@ -1,4 +1,9 @@
-"""Νευτώνειο πείραμα Burrau — εκτέλεση: python three_body.py."""
+"""Νευτώνειος αριθμητικός πυρήνας και αρχικό πείραμα Burrau.
+
+Εκτέλεση: python three_body.py — έλεγχοι και σχήμα δημοσίευσης στο results/.
+Για μενού πέντε περιπτώσεων και αργή κίνηση ανοίξτε το three_body.ipynb.
+Ο κοινός πυρήνας δέχεται προαιρετικές μάζες και διάρκεια για τα presets.py.
+"""
 from pathlib import Path
 import json
 import platform

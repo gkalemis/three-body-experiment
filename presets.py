@@ -1,4 +1,9 @@
-"""Έτοιμες περιπτώσεις και διαδραστικό μενού για το notebook."""
+"""Πέντε περιπτώσεις, μενού και κινούμενη απεικόνιση στο notebook.
+
+Τοπική αριθμητική εκτέλεση: python presets.py euler.
+Στο notebook: Εκτέλεση περίπτωσης → Προβολή κίνησης → αναπαραγωγή.
+Η motion_html χρησιμοποιεί τις έτοιμες λύσεις και δεν ξαναλύνει τις εξισώσεις.
+"""
 from pathlib import Path
 import json
 import numpy as np
@@ -158,21 +163,106 @@ def plot_case(t, a, b, delta, errors, case, out):
     plt.close(fig)
 
 
+def motion_html(times, a, b, case, frame_count=180, interval_ms=180):
+    """HTML με χειριστήρια αναπαραγωγής, από ήδη υπολογισμένες λύσεις."""
+    import re
+    from matplotlib.animation import FuncAnimation
+    times = np.asarray(times)
+    if (len(times) < 2 or a.shape != (len(times), 12) or b.shape != a.shape
+            or not np.all(np.diff(times) > 0)):
+        raise ValueError('Χρειάζονται δύο λύσεις 12 συνιστωσών σε κοινούς αύξοντες χρόνους.')
+    if frame_count < 2 or interval_ms <= 0:
+        raise ValueError('Χρειάζονται τουλάχιστον δύο καρέ και θετικό διάστημα προβολής.')
+    # Ομοιόμορφες στιγμές εξόδου: επιλέγουμε υποσύνολο μόνο για την εικόνα.
+    indices = np.unique(np.rint(np.linspace(0, len(times)-1, frame_count)).astype(int))
+    positions = [a[:, :6].reshape(-1, 3, 2), b[:, :6].reshape(-1, 3, 2)]
+    both = np.concatenate(positions, axis=0)
+    low, high = both.min(axis=(0, 1)), both.max(axis=(0, 1))
+    middle = (low+high)/2
+    half_width = max(float(np.max(high-low))/2, .1)*1.12
+    delta = distance(a, b, case['masses'])
+    colors = ['#0072B2', '#D55E00', '#009E73']
+    with plt.rc_context({'font.family': 'DejaVu Sans', 'font.size': 10}):
+        fig, axes = plt.subplots(1, 2, figsize=(9, 4.4), dpi=90)
+        fig.subplots_adjust(left=.07, right=.98, bottom=.18, top=.78, wspace=.25)
+        title = fig.suptitle('', fontsize=11)
+        markers, trails = [], []
+        for ax, label in zip(axes, ['Εκδοχή Α', 'Εκδοχή Β — μικρή αρχική αλλαγή']):
+            ax.set(xlim=(middle[0]-half_width, middle[0]+half_width),
+                   ylim=(middle[1]-half_width, middle[1]+half_width),
+                   xlabel='x', ylabel='y', title=label, aspect='equal')
+            ax.grid(alpha=.15)
+            ax.plot(0, 0, '+', color='.5', ms=7, label='Κέντρο μάζας')
+            local_markers, local_trails = [], []
+            for i, color in enumerate(colors):
+                trail, = ax.plot([], [], color=color, alpha=.45, lw=.8)
+                marker, = ax.plot([], [], 'o', color=color, ms=7, label=f'Σώμα {i+1}')
+                local_markers.append(marker)
+                local_trails.append(trail)
+            markers.append(local_markers)
+            trails.append(local_trails)
+        fig.legend(*axes[0].get_legend_handles_labels(), loc='lower center',
+                   ncol=4, fontsize=8)
+
+        def update(frame):
+            k = indices[frame]
+            title.set_text(f"Χρόνος: {times[k]:.3f} / {times[-1]:g}   |   Απόσταση D: {delta[k]:.3e}\n"
+                           'Κοινός χρόνος και ίδια κλίμακα — οι γραμμές δείχνουν μόνο το παρελθόν')
+            for run, r in enumerate(positions):
+                for i in range(3):
+                    markers[run][i].set_data([r[k, i, 0]], [r[k, i, 1]])
+                    trails[run][i].set_data(r[:k+1, i, 0], r[:k+1, i, 1])
+            return [title]+[item for group in markers+trails for item in group]
+
+        animation = FuncAnimation(fig, update, frames=len(indices),
+                                  interval=interval_ms, blit=False, repeat=False)
+        try:
+            html = animation.to_jshtml(default_mode='once')
+        finally:
+            plt.close(fig)
+    # Ελληνικά βοηθητικά κείμενα και σύμβολα χωρίς εξωτερικές γραμματοσειρές.
+    translations = {'Decrease speed':'Πιο αργά', 'First frame':'Αρχή',
+        'Previous frame':'Προηγούμενο καρέ', 'Play backwards':'Αναπαραγωγή προς τα πίσω',
+        'Pause':'Παύση', 'Play':'Αναπαραγωγή', 'Next frame':'Επόμενο καρέ',
+        'Last frame':'Τέλος', 'Increase speed':'Πιο γρήγορα',
+        'Repetition mode':'Τρόπος επανάληψης'}
+    for english, greek in translations.items():
+        html = html.replace(f'"{english}"', f'"{greek}"')
+    for english, greek in [('Once','Μία φορά'), ('Loop','Επανάληψη'), ('Reflect','Μπρος–πίσω')]:
+        html = html.replace('>'+english+'<', '>'+greek+'<')
+    icons = {'fa-minus':'−', 'fa-fast-backward':'⏮', 'fa-step-backward':'◀|',
+             'fa-play fa-flip-horizontal':'◀', 'fa-pause':'Ⅱ', 'fa-play':'▶',
+             'fa-step-forward':'|▶', 'fa-fast-forward':'⏭', 'fa-plus':'+'}
+    for icon, symbol in icons.items():
+        html = html.replace('<i class="fa '+icon+'"></i>', symbol)
+    html = re.sub(r'<link\b[^>]*>', '', html)
+    instructions = ('<p lang="el"><b>Παρακολούθησε την κίνηση:</b> πάτησε ▶ για αναπαραγωγή, '
+        'Ⅱ για παύση, − για πιο αργά και + για πιο γρήγορα. '
+        'Μετακίνησε τη μπάρα για να διαλέξεις στιγμή ή χρησιμοποίησε τα κουμπιά '
+        'για ένα καρέ κάθε φορά. Η αρχική προβολή διαρκεί περίπου '
+        f'{len(indices)*interval_ms/1000:.1f} δευτερόλεπτα· '
+        'ο χρόνος προσομοίωσης φαίνεται πάνω από τα σχήματα.</p>')
+    return '<!doctype html><html lang="el"><meta charset="utf-8"><title>Κίνηση τριών σωμάτων</title>'+instructions+html+'</html>'
+
+
 def show_menu():
     """Μενού με σταθερές περιοχές εμφάνισης, χωρίς σύλληψη εξόδου kernel."""
     import ipywidgets as widgets
-    from IPython.display import display, Markdown, Image
+    from IPython.display import display, Markdown, Image, HTML
     choice = widgets.Dropdown(options=[(v['label'], k) for k, v in PRESETS.items()],
         value='lagrange_stable', description='Περίπτωση:',
         style={'description_width': 'initial'}, layout=widgets.Layout(width='95%'))
     button = widgets.Button(description='Εκτέλεση περίπτωσης', button_style='primary',
                             layout=widgets.Layout(width='220px'))
+    animate_button = widgets.Button(description='Προβολή κίνησης', disabled=True,
+        layout=widgets.Layout(width='220px'))
     display(choice)
     info = display(Markdown(''), display_id=True)
-    display(button)
+    display(widgets.HBox([button, animate_button]))
     picture = display(Markdown(''), display_id=True)
     summary = display(Markdown(''), display_id=True)
-    state = dict(last_report=None)
+    movie = display(Markdown(''), display_id=True)
+    state = dict(last_report=None, last_data=None, animation_html=None)
 
     def describe(change=None):
         c = PRESETS[choice.value]
@@ -188,14 +278,23 @@ def show_menu():
         picture.update(Markdown(''))
         summary.update(Markdown(''))
         state['last_report'] = None
+        state['last_data'] = None
+        state['animation_html'] = None
+        animate_button.disabled = True
+        movie.update(Markdown(''))
 
     def execute(event=None):
         button.disabled = True
         choice.disabled = True
+        animate_button.disabled = True
+        movie.update(Markdown(''))
+        state['animation_html'] = None
+        state['last_data'] = None
         state['last_report'] = None
         summary.update(Markdown('**Υπολογίζονται οι δύο εκδοχές σε τρία επίπεδα ακρίβειας…**'))
         try:
-            _, _, _, report = run_case(choice.value)
+            times, a, b, report = run_case(choice.value)
+            state['last_data'] = (times, a, b)
             state['last_report'] = report
             picture.update(Image(filename=str(Path('results/presets')/choice.value/'comparison.png')))
             summary.update(Markdown(f"**Τελική ενίσχυση:** {report['final_amplification']:.3g} φορές. "
@@ -210,13 +309,30 @@ def show_menu():
         finally:
             button.disabled = False
             choice.disabled = False
+            animate_button.disabled = state['last_data'] is None
 
+    def animate(event=None):
+        if state['last_data'] is None:
+            return
+        button.disabled = choice.disabled = animate_button.disabled = True
+        movie.update(Markdown('**Ετοιμάζονται τα καρέ της κίνησης…**'))
+        try:
+            html = motion_html(*state['last_data'], PRESETS[choice.value])
+            state['animation_html'] = html
+            (Path('results/presets')/choice.value/'motion.html').write_text(html)
+            movie.update(HTML(html))
+        except Exception as exc:
+            movie.update(Markdown('**Δεν δημιουργήθηκε η κινούμενη απεικόνιση:** '+str(exc)))
+        finally:
+            button.disabled = choice.disabled = animate_button.disabled = False
+
+    animate_button.on_click(animate)
     choice.observe(describe, names='value')
     button.on_click(execute)
     describe()
     execute()  # Η «Εκτέλεση όλων» παράγει αποτέλεσμα χωρίς επιπλέον κλικ.
     return dict(choice=choice, button=button, info=info, picture=picture,
-                summary=summary, state=state)
+                summary=summary, movie=movie, animate_button=animate_button, state=state)
 
 
 if __name__ == '__main__':

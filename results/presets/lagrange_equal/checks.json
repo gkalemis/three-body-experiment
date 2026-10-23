@@ -1,0 +1,121 @@
+{
+  "case": "lagrange_equal",
+  "label": "Ισόπλευρο τρίγωνο — ίσες μάζες",
+  "duration": 10.0,
+  "epsilon": 1e-06,
+  "masses": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "r": [
+    [
+      0.0,
+      1.1547005383792517
+    ],
+    [
+      -1.0,
+      -0.5773502691896258
+    ],
+    [
+      1.0,
+      -0.5773502691896258
+    ]
+  ],
+  "v": [
+    [
+      -0.7071067811865476,
+      0.0
+    ],
+    [
+      0.3535533905932738,
+      -0.6123724356957945
+    ],
+    [
+      0.3535533905932738,
+      0.6123724356957945
+    ]
+  ],
+  "levels": [
+    {
+      "rtol": 1e-11,
+      "atol": 1e-13,
+      "max_step": 0.03,
+      "A": {
+        "relative_energy_drift": 2.9605947323337517e-15,
+        "absolute_momentum_drift": 8.455206652451151e-16,
+        "absolute_angular_momentum_drift": 4.440892098500626e-15,
+        "com_drift": 1.646830819860649e-15,
+        "sampled_min_separation": 1.9999999999999887,
+        "nfev": 5012,
+        "accepted_steps": 334
+      },
+      "B": {
+        "relative_energy_drift": 1.3322682956842528e-15,
+        "absolute_momentum_drift": 2.1355566272775288e-15,
+        "absolute_angular_momentum_drift": 1.7763568394002505e-15,
+        "com_drift": 3.476532807569939e-15,
+        "sampled_min_separation": 1.9999631422796227,
+        "nfev": 5012,
+        "accepted_steps": 334
+      }
+    },
+    {
+      "rtol": 1e-12,
+      "atol": 1e-14,
+      "max_step": 0.015,
+      "A": {
+        "relative_energy_drift": 3.7007434154171895e-15,
+        "absolute_momentum_drift": 9.036560719766055e-16,
+        "absolute_angular_momentum_drift": 5.329070518200751e-15,
+        "com_drift": 1.6249593078591563e-15,
+        "sampled_min_separation": 1.9999999999999896,
+        "nfev": 10007,
+        "accepted_steps": 667
+      },
+      "B": {
+        "relative_energy_drift": 2.072417348842171e-15,
+        "absolute_momentum_drift": 1.4947479146945255e-15,
+        "absolute_angular_momentum_drift": 2.6645352591003757e-15,
+        "com_drift": 1.816759736522041e-15,
+        "sampled_min_separation": 1.9999631422795925,
+        "nfev": 10007,
+        "accepted_steps": 667
+      }
+    },
+    {
+      "rtol": 1e-13,
+      "atol": 1e-15,
+      "max_step": 0.0075,
+      "A": {
+        "relative_energy_drift": 3.4046839421838143e-15,
+        "absolute_momentum_drift": 1.5582722720639762e-15,
+        "absolute_angular_momentum_drift": 3.552713678800501e-15,
+        "com_drift": 2.3434795139979834e-15,
+        "sampled_min_separation": 1.9999999999999787,
+        "nfev": 20012,
+        "accepted_steps": 1334
+      },
+      "B": {
+        "relative_energy_drift": 3.9968048870527586e-15,
+        "absolute_momentum_drift": 3.3472809927562375e-15,
+        "absolute_angular_momentum_drift": 4.884981308350689e-15,
+        "com_drift": 5.592532299572115e-15,
+        "sampled_min_separation": 1.9999631422796418,
+        "nfev": 20012,
+        "accepted_steps": 1334
+      }
+    }
+  ],
+  "initial_distance": 8.164965808790325e-07,
+  "final_amplification": 27.811387135747477,
+  "maximum_amplification": 27.811387135747477,
+  "base_reference_difference": 1.5213634202491804e-14,
+  "strict_reference_difference": 3.2724396492015584e-14,
+  "minimum_signal_ratio": 228864385.72964168,
+  "comparison_floor": 1e-11,
+  "differences_below_floor": true,
+  "numerical_checks_passed": true,
+  "max_error_against_exact_rotation": 1.753765866285138e-14,
+  "initial_rotation_residual": 1.6653345369377348e-16
+}

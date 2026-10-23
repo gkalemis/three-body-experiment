@@ -16,9 +16,9 @@ R_STOP = 1e-3
 PAIRS = [(0, 1), (0, 2), (1, 2)]
 
 
-def center(x):
+def center(x, masses=M):
     """Αφαίρεση κέντρου μάζας από πίνακα (...,3,2)."""
-    return x - np.sum(x * M[:, None], axis=-2, keepdims=True) / M.sum()
+    return x - np.sum(x * masses[:, None], axis=-2, keepdims=True) / masses.sum()
 
 
 def initial(perturbed=False):
@@ -30,18 +30,18 @@ def initial(perturbed=False):
     return np.r_[center(r).ravel(), np.zeros(6)]
 
 
-def rhs(t, y):
+def rhs(t, y, masses=M):
     r, v = y[:6].reshape(3, 2), y[6:].reshape(3, 2)
     a = np.zeros_like(r)
     for i, j in PAIRS:
         d = r[j] - r[i]
         f = d / np.linalg.norm(d)**3  # Ακριβής νόμος 1/r², χωρίς εξομάλυνση.
-        a[i] += M[j] * f
-        a[j] -= M[i] * f
+        a[i] += masses[j] * f
+        a[j] -= masses[i] * f
     return np.r_[v.ravel(), a.ravel()]
 
 
-def integrate(y0, rtol, atol, max_step):
+def integrate(y0, rtol, atol, max_step, masses=M, t_end=T_END):
     events = []
     for i, j in PAIRS:
         def close(t, y, i=i, j=j):
@@ -50,7 +50,7 @@ def integrate(y0, rtol, atol, max_step):
         close.terminal = True
         close.direction = -1
         events.append(close)
-    sol = solve_ivp(rhs, (0, T_END), y0, method='DOP853',
+    sol = solve_ivp(lambda t, y: rhs(t, y, masses), (0, t_end), y0, method='DOP853',
                     rtol=rtol, atol=atol, max_step=max_step,
                     dense_output=True, events=events)
     if not sol.success or sol.status != 0:
@@ -59,32 +59,32 @@ def integrate(y0, rtol, atol, max_step):
     return sol
 
 
-def distance(a, b):
+def distance(a, b, masses=M):
     """Μαζικά σταθμισμένη RMS απόσταση θέσεων, σε κοινό χρόνο."""
-    dr = center(a[:, :6].reshape(-1, 3, 2)) - center(b[:, :6].reshape(-1, 3, 2))
-    return np.sqrt(np.sum(M[None, :, None] * dr**2, axis=(1, 2)) / M.sum())
+    dr = center(a[:, :6].reshape(-1, 3, 2), masses) - center(b[:, :6].reshape(-1, 3, 2), masses)
+    return np.sqrt(np.sum(masses[None, :, None] * dr**2, axis=(1, 2)) / masses.sum())
 
 
-def invariants(y):
+def invariants(y, masses=M):
     r, v = y[:, :6].reshape(-1, 3, 2), y[:, 6:].reshape(-1, 3, 2)
-    energy = np.sum(M[None, :, None] * v**2, axis=(1, 2)) / 2
+    energy = np.sum(masses[None, :, None] * v**2, axis=(1, 2)) / 2
     for i, j in PAIRS:
-        energy -= M[i] * M[j] / np.linalg.norm(r[:, i] - r[:, j], axis=1)
-    p = np.sum(M[None, :, None] * v, axis=1)
-    l = np.sum(M * (r[:, :, 0]*v[:, :, 1] - r[:, :, 1]*v[:, :, 0]), axis=1)
+        energy -= masses[i] * masses[j] / np.linalg.norm(r[:, i] - r[:, j], axis=1)
+    p = np.sum(masses[None, :, None] * v, axis=1)
+    l = np.sum(masses * (r[:, :, 0]*v[:, :, 1] - r[:, :, 1]*v[:, :, 0]), axis=1)
     return energy, p, l
 
 
-def diagnostics(sol, times):
+def diagnostics(sol, times, masses=M):
     # Περιλαμβάνονται και τα προσαρμοστικά αποδεκτά βήματα.
     t = np.unique(np.r_[times, sol.t])
     y = sol.sol(t).T
-    e, p, l = invariants(y)
+    e, p, l = invariants(y, masses)
     r = y[:, :6].reshape(-1, 3, 2)
     return dict(relative_energy_drift=float(np.max(abs(e-e[0]))/abs(e[0])),
                 absolute_momentum_drift=float(np.max(np.linalg.norm(p-p[0], axis=1))),
                 absolute_angular_momentum_drift=float(np.max(abs(l-l[0]))),
-                com_drift=float(np.max(np.linalg.norm(np.sum(r*M[None,:,None], axis=1)/M.sum(), axis=1))),
+                com_drift=float(np.max(np.linalg.norm(np.sum(r*masses[None,:,None], axis=1)/masses.sum(), axis=1))),
                 sampled_min_separation=float(min(np.min(np.linalg.norm(r[:,i]-r[:,j], axis=1)) for i,j in PAIRS)),
                 nfev=sol.nfev, accepted_steps=len(sol.t)-1)
 

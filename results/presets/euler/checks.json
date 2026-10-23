@@ -1,0 +1,121 @@
+{
+  "case": "euler",
+  "label": "Ευθεία Euler — περιστρεφόμενη διάταξη",
+  "duration": 6.0,
+  "epsilon": 1e-06,
+  "masses": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "r": [
+    [
+      -1.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      1.0,
+      0.0
+    ]
+  ],
+  "v": [
+    [
+      -0.0,
+      -1.118033988749895
+    ],
+    [
+      -0.0,
+      0.0
+    ],
+    [
+      -0.0,
+      1.118033988749895
+    ]
+  ],
+  "levels": [
+    {
+      "rtol": 1e-11,
+      "atol": 1e-13,
+      "max_step": 0.03,
+      "A": {
+        "relative_energy_drift": 3.3750779948604765e-15,
+        "absolute_momentum_drift": 0.0,
+        "absolute_angular_momentum_drift": 3.1086244689504383e-15,
+        "com_drift": 0.0,
+        "sampled_min_separation": 0.9999999999999971,
+        "nfev": 3017,
+        "accepted_steps": 201
+      },
+      "B": {
+        "relative_energy_drift": 1.4210840504303237e-15,
+        "absolute_momentum_drift": 1.1322097734007351e-15,
+        "absolute_angular_momentum_drift": 1.7763568394002505e-15,
+        "com_drift": 6.540906951905234e-16,
+        "sampled_min_separation": 0.8959953639124506,
+        "nfev": 3017,
+        "accepted_steps": 201
+      }
+    },
+    {
+      "rtol": 1e-12,
+      "atol": 1e-14,
+      "max_step": 0.015,
+      "A": {
+        "relative_energy_drift": 4.796163466380677e-15,
+        "absolute_momentum_drift": 0.0,
+        "absolute_angular_momentum_drift": 4.884981308350689e-15,
+        "com_drift": 0.0,
+        "sampled_min_separation": 0.999999999999996,
+        "nfev": 6017,
+        "accepted_steps": 401
+      },
+      "B": {
+        "relative_energy_drift": 1.953990569341695e-15,
+        "absolute_momentum_drift": 3.1097394483713888e-15,
+        "absolute_angular_momentum_drift": 1.7763568394002505e-15,
+        "com_drift": 3.967958075330647e-15,
+        "sampled_min_separation": 0.8959953639157773,
+        "nfev": 6017,
+        "accepted_steps": 401
+      }
+    },
+    {
+      "rtol": 1e-13,
+      "atol": 1e-15,
+      "max_step": 0.0075,
+      "A": {
+        "relative_energy_drift": 4.796163466380677e-15,
+        "absolute_momentum_drift": 0.0,
+        "absolute_angular_momentum_drift": 5.329070518200751e-15,
+        "com_drift": 0.0,
+        "sampled_min_separation": 0.9999999999999989,
+        "nfev": 12002,
+        "accepted_steps": 800
+      },
+      "B": {
+        "relative_energy_drift": 2.8421681008606474e-15,
+        "absolute_momentum_drift": 2.434909185329438e-15,
+        "absolute_angular_momentum_drift": 3.552713678800501e-15,
+        "com_drift": 2.500741594335848e-15,
+        "sampled_min_separation": 0.8959953639167709,
+        "nfev": 12002,
+        "accepted_steps": 800
+      }
+    }
+  ],
+  "initial_distance": 8.164965809394654e-07,
+  "final_amplification": 77215.91023066729,
+  "maximum_amplification": 77215.91023066729,
+  "base_reference_difference": 2.6531849293830845e-12,
+  "strict_reference_difference": 6.087133514748592e-13,
+  "minimum_signal_ratio": 1385204850.2592454,
+  "comparison_floor": 1e-11,
+  "differences_below_floor": true,
+  "numerical_checks_passed": true,
+  "max_error_against_exact_rotation": 4.126162952233366e-15,
+  "initial_rotation_residual": 2.220446049250313e-16
+}

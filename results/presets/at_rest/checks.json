@@ -1,0 +1,119 @@
+{
+  "case": "at_rest",
+  "label": "Τρίγωνο αρχικά ακίνητο — αρχίζει να συρρικνώνεται",
+  "duration": 1.4,
+  "epsilon": 1e-06,
+  "masses": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "r": [
+    [
+      0.0,
+      1.1547005383792517
+    ],
+    [
+      -1.0,
+      -0.5773502691896258
+    ],
+    [
+      1.0,
+      -0.5773502691896258
+    ]
+  ],
+  "v": [
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ]
+  ],
+  "levels": [
+    {
+      "rtol": 1e-11,
+      "atol": 1e-13,
+      "max_step": 0.03,
+      "A": {
+        "relative_energy_drift": 3.92278802034222e-14,
+        "absolute_momentum_drift": 0.0,
+        "absolute_angular_momentum_drift": 0.0,
+        "com_drift": 0.0,
+        "sampled_min_separation": 1.1361842251896628,
+        "nfev": 722,
+        "accepted_steps": 48
+      },
+      "B": {
+        "relative_energy_drift": 3.907986023676935e-14,
+        "absolute_momentum_drift": 6.684427777288335e-16,
+        "absolute_angular_momentum_drift": 2.0184329264948987e-16,
+        "com_drift": 2.433783996181864e-16,
+        "sampled_min_separation": 1.136184052075483,
+        "nfev": 722,
+        "accepted_steps": 48
+      }
+    },
+    {
+      "rtol": 1e-12,
+      "atol": 1e-14,
+      "max_step": 0.015,
+      "A": {
+        "relative_energy_drift": 5.921189464667502e-16,
+        "absolute_momentum_drift": 0.0,
+        "absolute_angular_momentum_drift": 0.0,
+        "com_drift": 0.0,
+        "sampled_min_separation": 1.1361842251896614,
+        "nfev": 1412,
+        "accepted_steps": 94
+      },
+      "B": {
+        "relative_energy_drift": 8.88178641744758e-16,
+        "absolute_momentum_drift": 5.4672143489065705e-16,
+        "absolute_angular_momentum_drift": 1.9022168297580565e-16,
+        "com_drift": 2.369631985977782e-16,
+        "sampled_min_separation": 1.1361840520754798,
+        "nfev": 1412,
+        "accepted_steps": 94
+      }
+    },
+    {
+      "rtol": 1e-13,
+      "atol": 1e-15,
+      "max_step": 0.0075,
+      "A": {
+        "relative_energy_drift": 4.440892098500627e-16,
+        "absolute_momentum_drift": 0.0,
+        "absolute_angular_momentum_drift": 0.0,
+        "com_drift": 0.0,
+        "sampled_min_separation": 1.1361842251896626,
+        "nfev": 2807,
+        "accepted_steps": 187
+      },
+      "B": {
+        "relative_energy_drift": 5.921190944965054e-16,
+        "absolute_momentum_drift": 4.742874840267547e-16,
+        "absolute_angular_momentum_drift": 2.8850524518632707e-16,
+        "com_drift": 6.027214829045347e-16,
+        "sampled_min_separation": 1.1361840520754798,
+        "nfev": 2807,
+        "accepted_steps": 187
+      }
+    }
+  ],
+  "initial_distance": 8.164965808790325e-07,
+  "final_amplification": 1.2174572732530917,
+  "maximum_amplification": 1.2174572732530917,
+  "base_reference_difference": 1.8659061072795044e-14,
+  "strict_reference_difference": 8.308148362110449e-16,
+  "minimum_signal_ratio": 51190895.4099004,
+  "comparison_floor": 1e-11,
+  "differences_below_floor": true,
+  "numerical_checks_passed": true
+}

@@ -1,0 +1,119 @@
+{
+  "case": "burrau",
+  "label": "Burrau — ενίσχυση μικρής αρχικής διαφοράς",
+  "duration": 15.8,
+  "epsilon": 1e-06,
+  "masses": [
+    3.0,
+    4.0,
+    5.0
+  ],
+  "r": [
+    [
+      1.0,
+      3.0
+    ],
+    [
+      -2.0,
+      -1.0
+    ],
+    [
+      1.0,
+      -1.0
+    ]
+  ],
+  "v": [
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ]
+  ],
+  "levels": [
+    {
+      "rtol": 1e-12,
+      "atol": 1e-14,
+      "max_step": 0.01,
+      "A": {
+        "relative_energy_drift": 1.1261178379046275e-10,
+        "absolute_momentum_drift": 6.48309409388569e-14,
+        "absolute_angular_momentum_drift": 2.2166268820456025e-11,
+        "com_drift": 2.6359485083463524e-14,
+        "sampled_min_separation": 0.008518490725972504,
+        "nfev": 31406,
+        "accepted_steps": 2044
+      },
+      "B": {
+        "relative_energy_drift": 1.018538698671744e-10,
+        "absolute_momentum_drift": 8.788928253162695e-14,
+        "absolute_angular_momentum_drift": 2.2300827851040594e-11,
+        "com_drift": 6.089257015041556e-14,
+        "sampled_min_separation": 0.008518585965118893,
+        "nfev": 31406,
+        "accepted_steps": 2044
+      }
+    },
+    {
+      "rtol": 1e-13,
+      "atol": 1e-15,
+      "max_step": 0.005,
+      "A": {
+        "relative_energy_drift": 1.6192335725393856e-11,
+        "absolute_momentum_drift": 9.736396406289598e-14,
+        "absolute_angular_momentum_drift": 1.0675904604795505e-12,
+        "com_drift": 6.136913917022971e-14,
+        "sampled_min_separation": 0.008516943561100616,
+        "nfev": 55844,
+        "accepted_steps": 3694
+      },
+      "B": {
+        "relative_energy_drift": 1.3328915436495478e-11,
+        "absolute_momentum_drift": 1.4897058429662383e-13,
+        "absolute_angular_momentum_drift": 1.1457501614131615e-12,
+        "com_drift": 9.824484936683226e-14,
+        "sampled_min_separation": 0.008517031689950832,
+        "nfev": 55844,
+        "accepted_steps": 3694
+      }
+    },
+    {
+      "rtol": 3e-14,
+      "atol": 3e-16,
+      "max_step": 0.0025,
+      "A": {
+        "relative_energy_drift": 8.856097476514736e-12,
+        "absolute_momentum_drift": 1.0048591735576161e-13,
+        "absolute_angular_momentum_drift": 3.6770586575585185e-13,
+        "com_drift": 6.534412876621462e-14,
+        "sampled_min_separation": 0.008517265255394809,
+        "nfev": 102626,
+        "accepted_steps": 6820
+      },
+      "B": {
+        "relative_energy_drift": 1.1067559667941249e-11,
+        "absolute_momentum_drift": 6.703246762680666e-14,
+        "absolute_angular_momentum_drift": 4.263256414560601e-13,
+        "com_drift": 3.9500287517334635e-14,
+        "sampled_min_separation": 0.008517373369837641,
+        "nfev": 102626,
+        "accepted_steps": 6820
+      }
+    }
+  ],
+  "initial_distance": 6.614378276907522e-07,
+  "final_amplification": 16.438970522624757,
+  "maximum_amplification": 44.43883643484798,
+  "base_reference_difference": 4.994659243174803e-09,
+  "strict_reference_difference": 1.3533864957992134e-09,
+  "minimum_signal_ratio": 504.2535768804076,
+  "comparison_floor": 1e-11,
+  "differences_below_floor": false,
+  "numerical_checks_passed": true
+}

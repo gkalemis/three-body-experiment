@@ -48,5 +48,15 @@
     "physical_end": 15.8,
     "full_html_in_package": false,
     "browser_javascript_tested": false
+  },
+  "euler_visible": {
+    "frames_tested": 180,
+    "default_frames": 180,
+    "interval_ms": 250,
+    "bytes": 9884287,
+    "physical_start": 0.0,
+    "physical_end": 8.0,
+    "full_html_in_package": true,
+    "browser_javascript_tested": false
   }
 }

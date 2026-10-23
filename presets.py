@@ -1,4 +1,4 @@
-"""Πέντε περιπτώσεις, μενού και κινούμενη απεικόνιση στο notebook.
+"""Έξι περιπτώσεις, μενού και κινούμενη απεικόνιση στο notebook.
 
 Τοπική αριθμητική εκτέλεση: python presets.py euler.
 Στο notebook: Εκτέλεση περίπτωσης → Προβολή κίνησης → αναπαραγωγή.
@@ -55,8 +55,18 @@ def make_presets():
         explanation='Το αρχικό πείραμα του notebook. Διαδοχικές στενές '
         'προσεγγίσεις ενισχύουν τη μικρή αρχική διαφορά στο επιλεγμένο '
         'χρονικό διάστημα. Η απόκλιση μόνη της δεν αποδεικνύει χάος.')
-    return dict(lagrange_stable=unequal, lagrange_equal=equal, euler=line,
-                at_rest=rest, burrau=burrau)
+    visible = dict(line)
+    visible.update(label='Ξεκίνα εδώ — εμφανής απόκλιση Euler (t=8)',
+        duration=8., animation_interval_ms=250,
+        explanation='Ίδιες μάζες, αρχικές θέσεις, ταχύτητες και διαταραχή 10⁻⁶ '
+        'με την περίπτωση Euler t=6, αλλά παρακολουθούμε μέχρι t=8. '
+        'Η μεγαλύτερη διάρκεια αφήνει την αστάθεια να γίνει ορατή. '
+        'Στην Α η ευθεία περιστρέφεται, ενώ η Β απομακρύνεται εμφανώς '
+        'από αυτή τη διάταξη. Παρατήρησε ιδιαίτερα το διάστημα t=6 έως t=8. '
+        'Η αρχική αναπαραγωγή διαρκεί περίπου 45 δευτερόλεπτα. '
+        'Η απόκλιση από ασταθή σχετική ισορροπία δεν αποδεικνύει από μόνη της χάος.')
+    return dict(euler_visible=visible, lagrange_stable=unequal,
+                lagrange_equal=equal, euler=line, at_rest=rest, burrau=burrau)
 
 
 PRESETS = make_presets()
@@ -71,7 +81,7 @@ def preset_initial(case, perturbed=False, epsilon=1e-6):
     return np.r_[center(r, m).ravel(), center(case['v'], m).ravel()]
 
 
-def run_case(key='lagrange_stable', output='results/presets'):
+def run_case(key='euler_visible', output='results/presets'):
     """Έξι λύσεις: δύο αρχικές καταστάσεις × τρία επίπεδα ακρίβειας."""
     case = PRESETS[key]
     m, duration = case['masses'], case['duration']
@@ -250,7 +260,7 @@ def show_menu():
     import ipywidgets as widgets
     from IPython.display import display, Markdown, Image, HTML
     choice = widgets.Dropdown(options=[(v['label'], k) for k, v in PRESETS.items()],
-        value='lagrange_stable', description='Περίπτωση:',
+        value='euler_visible', description='Περίπτωση:',
         style={'description_width': 'initial'}, layout=widgets.Layout(width='95%'))
     button = widgets.Button(description='Εκτέλεση περίπτωσης', button_style='primary',
                             layout=widgets.Layout(width='220px'))
@@ -274,7 +284,8 @@ def show_menu():
             f"\n\nΔιάρκεια: **{c['duration']:g}** μονάδες χρόνου. Οι τιμές του πίνακα "
             'είναι της Α. Στη Β αλλάζουν μόνο x₁ κατά 10⁻⁶ και x₂ κατά −(m₁/m₂)·10⁻⁶. '
             'Οι ταχύτητες εξασφαλίζουν ακίνητο κέντρο μάζας. Ο πίνακας εμφανίζει '
-            '8 σημαντικά ψηφία. Πάτησε το κουμπί για νέο υπολογισμό.'))
+            '8 σημαντικά ψηφία. Η επιβράδυνση προβολής δεν αυξάνει τον χρόνο προσομοίωσης. '
+            'Πάτησε το κουμπί για νέο υπολογισμό.'))
         picture.update(Markdown(''))
         summary.update(Markdown(''))
         state['last_report'] = None
@@ -317,7 +328,9 @@ def show_menu():
         button.disabled = choice.disabled = animate_button.disabled = True
         movie.update(Markdown('**Ετοιμάζονται τα καρέ της κίνησης…**'))
         try:
-            html = motion_html(*state['last_data'], PRESETS[choice.value])
+            case = PRESETS[choice.value]
+            html = motion_html(*state['last_data'], case,
+                               interval_ms=case.get('animation_interval_ms', 180))
             state['animation_html'] = html
             (Path('results/presets')/choice.value/'motion.html').write_text(html)
             movie.update(HTML(html))
@@ -338,7 +351,7 @@ def show_menu():
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description='Εκτέλεση έτοιμης περίπτωσης τριών σωμάτων')
-    parser.add_argument('case', choices=list(PRESETS), nargs='?', default='lagrange_stable')
+    parser.add_argument('case', choices=list(PRESETS), nargs='?', default='euler_visible')
     args = parser.parse_args()
     _, _, _, checks = run_case(args.case)
     print(json.dumps(checks, ensure_ascii=False, indent=2))

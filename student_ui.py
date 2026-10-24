@@ -37,7 +37,7 @@ def student_animation(result, frames=480):
 def show_student_experiment(auto_run=True):
     """A few visible choices, animation first, technical information folded away."""
     import ipywidgets as w
-    from IPython.display import display, HTML, Image, FileLink
+    from IPython.display import display, HTML, Image, FileLink, IFrame
 
     style = {'description_width': 'initial'}
     wide = w.Layout(width='96%')
@@ -131,10 +131,13 @@ def show_student_experiment(auto_run=True):
         path.write_text(page, encoding='utf-8')
         with movie:
             movie.clear_output(wait=True)
-            display(HTML(
-                '<iframe title="Παρατήρησε Α και Β" '
-                'style="width:100%;height:820px;border:0" srcdoc="'
-                + html.escape(page, quote=True) + '"></iframe>'
+            display(IFrame(
+                src="about:blank", width="100%", height=820,
+                extras=[
+                    'title="Παρατήρησε Α και Β"',
+                    'style="border:0"',
+                    'srcdoc="' + html.escape(page, quote=True) + '"',
+                ],
             ))
 
     def execute(event=None):

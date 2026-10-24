@@ -259,7 +259,7 @@ def animation_html(result, frames=480):
 def show_experiment(auto_run=False):
     """Display controls, invalidate stale results, and render completed runs."""
     import ipywidgets as w
-    from IPython.display import display, HTML, Markdown, Image, FileLink
+    from IPython.display import display, HTML, Markdown, Image, FileLink, IFrame
 
     style = {"description_width": "initial"}
     choice = w.Dropdown(
@@ -424,10 +424,13 @@ def show_experiment(auto_run=False):
             import html as html_module
 
             display(
-                HTML(
-                    '<iframe title="Κίνηση Α και Β" style="width:100%;height:850px;border:0" srcdoc="'
-                    + html_module.escape(html, quote=True)
-                    + '"></iframe>'
+                IFrame(
+                    src="about:blank", width="100%", height=850,
+                    extras=[
+                        'title="Κίνηση Α και Β"',
+                        'style="border:0"',
+                        'srcdoc="' + html_module.escape(html, quote=True) + '"',
+                    ],
                 )
             )
             display(FileLink(str(path), result_html_prefix="Λήψη αυτόνομης κίνησης: "))

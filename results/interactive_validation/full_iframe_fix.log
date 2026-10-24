@@ -1,0 +1,20 @@
+Cell 2 OK
+Cell 3 OK
+Cell 6 OK
+Cell 8 OK
+Cell 10 OK
+Cell 12 OK
+Cell 14 OK
+Cell 17 OK
+Cell 18 OK
+Cell 21 OK
+Cell 23 OK
+Cell 25 OK
+Cell 28 OK
+Cell 30 OK
+Cell 32 OK
+Cell 34 OK
+Cell 37 OK
+Cell 39 OK
+Readable callbacks: Euler t=12 D= 2.399636557348862 ; zero change D=0
+STANDALONE IPYTHON PASSED; Colab setup branch tested with a stub, not a live Colab session.

@@ -9,20 +9,28 @@
 | **Μαθητική — απλή** | Λίγες επιλογές, animation στο επίκεντρο, συμπτυγμένος κώδικας και προαιρετικοί αριθμοί | [Colab για μαθητές](https://colab.research.google.com/github/gkalemis/three-body-experiment/blob/main/three_body_students.ipynb) · [Notebook](three_body_students.ipynb) |
 | **Πλήρης — αναλυτική** | Αναγνώσιμος κώδικας, εξηγήσεις και αναλυτικοί υπολογισμοί | [Colab πλήρους έκδοσης](https://colab.research.google.com/github/gkalemis/three-body-experiment/blob/main/three_body.ipynb) · [Notebook](three_body.ipynb) |
 
-Η πλήρης έκδοση παραμένει ίδια. Η μαθητική έκδοση χρησιμοποιεί τον ίδιο αριθμητικό πυρήνα και τους ίδιους ελέγχους. Στη μαθητική έκδοση πάτησε «Εκτέλεση όλων», περίμενε την εφαρμογή και μετά «Δες τι θα συμβεί». Οι παρακάτω αναλυτικές οδηγίες χειριστηρίων αφορούν την πλήρη έκδοση. Οι σύνδεσμοι της νέας μαθητικής έκδοσης στο GitHub/Colab προϋποθέτουν να ανέβει το νέο αρχείο στο αποθετήριο.
+Η πλήρης έκδοση παραμένει ίδια. Η μαθητική έκδοση χρησιμοποιεί τον ίδιο αριθμητικό πυρήνα και τους ίδιους ελέγχους. Στη μαθητική έκδοση πάτησε «Εκτέλεση όλων», περίμενε την εφαρμογή και μετά «Δες τι θα συμβεί». Οι παρακάτω αναλυτικές οδηγίες χειριστηρίων αφορούν την πλήρη έκδοση.
 
 Στο Colab ο κώδικας δηλώνεται ως συμπτυγμένη φόρμα· στο JupyterLab χρησιμοποιούνται οι αντίστοιχες ενδείξεις απόκρυψης πηγής. Η τελική εμφάνιση εξαρτάται από το περιβάλλον notebook. Η απόκρυψη διευκολύνει την παρουσίαση και δεν περιορίζει την πρόσβαση στον κώδικα.
 
 ## Άνοιγμα της εφαρμογής
 
-[![Άνοιγμα στο Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gkalemis/three-body-experiment/blob/main/three_body.ipynb)
+### Μαθητική έκδοση — ξεκίνα εδώ
 
-[![Άνοιγμα στο JupyterLab μέσω Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gkalemis/three-body-experiment/main?labpath=three_body.ipynb)
+[![Colab — μαθητική έκδοση](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gkalemis/three-body-experiment/blob/main/three_body_students.ipynb)
+[![JupyterLab — μαθητική έκδοση](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gkalemis/three-body-experiment/main?labpath=three_body_students.ipynb)
+
+### Πλήρης έκδοση — με κώδικα και αναλυτικές εξηγήσεις
+
+[![Colab — πλήρης έκδοση](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gkalemis/three-body-experiment/blob/main/three_body.ipynb)
+[![JupyterLab — πλήρης έκδοση](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gkalemis/three-body-experiment/main?labpath=three_body.ipynb)
 
 | Επιλογή | Σύνδεσμος |
 |---|---|
-| Google Colab | [Άνοιξε και εκτέλεσε το notebook στο Colab](https://colab.research.google.com/github/gkalemis/three-body-experiment/blob/main/three_body.ipynb) |
-| JupyterLab μέσω Binder | [Άνοιξε το notebook στο JupyterLab](https://mybinder.org/v2/gh/gkalemis/three-body-experiment/main?labpath=three_body.ipynb) |
+| Google Colab — μαθητική έκδοση | [Άνοιξε τη μαθητική εφαρμογή](https://colab.research.google.com/github/gkalemis/three-body-experiment/blob/main/three_body_students.ipynb) |
+| JupyterLab — μαθητική έκδοση | [Άνοιξε τη μαθητική εφαρμογή στο Binder](https://mybinder.org/v2/gh/gkalemis/three-body-experiment/main?labpath=three_body_students.ipynb) |
+| Google Colab — πλήρης έκδοση | [Άνοιξε την πλήρη έκδοση στο Colab](https://colab.research.google.com/github/gkalemis/three-body-experiment/blob/main/three_body.ipynb) |
+| JupyterLab — πλήρης έκδοση | [Άνοιξε την πλήρη έκδοση στο JupyterLab](https://mybinder.org/v2/gh/gkalemis/three-body-experiment/main?labpath=three_body.ipynb) |
 | Αποθετήριο GitHub | [Κώδικας και αρχεία του πειράματος](https://github.com/gkalemis/three-body-experiment) |
 | Notebook στο GitHub | [Προεπισκόπηση του three_body.ipynb](https://github.com/gkalemis/three-body-experiment/blob/main/three_body.ipynb) |
 | Οδηγός μαθητή | [Οδηγίες και προτεινόμενα πειράματα](https://github.com/gkalemis/three-body-experiment/blob/main/student_guide.md) |

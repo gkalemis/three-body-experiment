@@ -1,0 +1,4 @@
+-r requirements.txt
+black>=24,<27
+nbclient>=0.10,<1
+ipykernel>=6.29,<8

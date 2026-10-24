@@ -1,11 +1,8 @@
 from pathlib import Path
 import nbformat
-s=Path(__file__).resolve().parent
-e=s/'experiment.py'
-t=e.read_text().replace("template=Path(__file__).with_name('player.html').read_text() if '__file__' in globals() else PLAYER_TEMPLATE","template=PLAYER_TEMPLATE")
 
-e.write_text(t)
-intro='''# Τρία σώματα: άλλαξε την αρχή και παρακολούθησε την κίνηση
+s = Path(__file__).resolve().parent
+intro = """# Τρία σώματα: άλλαξε την αρχή και παρακολούθησε την κίνηση
 
 **Αυτόνομο notebook για Google Colab ή Jupyter με ipywidgets.** Δεν χρειάζονται αρχεία Python δίπλα του. Εκτέλεσε όλα τα κελιά, διάλεξε ρυθμίσεις και πάτησε **«Υπολόγισε Α και Β»**. Η αρχική εκτέλεση παρουσιάζει αυτόματα το παράδειγμα Euler έως t=8.
 
@@ -37,9 +34,8 @@ intro='''# Τρία σώματα: άλλαξε την αρχή και παρακ
 Η απόκλιση δείχνει ευαισθησία ή αστάθεια· **δεν αποδεικνύει από μόνη της χάος**. Η ακριβής αρχική κατάσταση καθορίζει μοναδικά την εξέλιξη όσο οι νευτώνειες εξισώσεις παραμένουν κανονικές.
 
 Το HTML κίνησης κατεβαίνει και ανοίγει μόνο του σε browser, χωρίς σύνδεση ή kernel. Για νέους υπολογισμούς απαιτείται η εκτέλεση του notebook. Τα αρχεία στο results/interactive αντικαθίστανται από την επόμενη εκτέλεση: κατέβασε όσα θέλεις να κρατήσεις.
-'''
-cells=[nbformat.v4.new_markdown_cell(intro)]
-setup='''import importlib.util, subprocess, sys
+"""
+setup = """import importlib.util, subprocess, sys
 missing = [p for p in ('numpy','scipy','matplotlib','ipywidgets') if importlib.util.find_spec(p) is None]
 if missing:
     subprocess.check_call([sys.executable, '-m', 'pip', 'install', *missing])
@@ -49,14 +45,201 @@ except ImportError:
     pass
 else:
     output.enable_custom_widget_manager()
-'''
-cells.append(nbformat.v4.new_code_cell(setup))
-for name in ['three_body','presets','experiment']:
-    source=(s/(name+'.py')).read_text()
-    if name=='experiment':source=source.replace("Path(__file__).with_name('player.html').read_text()",repr((s/'player.html').read_text()))
-    code=f"import types, sys\n_module = types.ModuleType({name!r})\nsys.modules[{name!r}] = _module\nexec(compile({source!r}, {name+'.py'!r}, 'exec'), _module.__dict__)\n"
-    cells.append(nbformat.v4.new_code_cell(code))
-cells.append(nbformat.v4.new_code_cell('from experiment import show_experiment\ncontrols = show_experiment(auto_run=True)'))
-n=nbformat.v4.new_notebook(cells=cells,metadata={'kernelspec':{'name':'python3','display_name':'Python 3','language':'python'},'language_info':{'name':'python'}})
-nbformat.validate(n);nbformat.write(n,s/'three_body.ipynb')
-print('Notebook ready:',len(cells),'cells')
+"""
+# Τα κελιά περιέχουν κανονικό κώδικα, όχι serialized πηγές μέσα σε exec.
+import ast
+
+
+def md(text):
+    cells.append(nbformat.v4.new_markdown_cell(text))
+
+
+def code(text):
+    cells.append(nbformat.v4.new_code_cell(text.rstrip() + "\n"))
+
+
+def extract(filename, names):
+    source = (s / filename).read_text()
+    tree = ast.parse(source)
+    nodes = {
+        node.name: node
+        for node in tree.body
+        if isinstance(node, (ast.FunctionDef, ast.ClassDef))
+    }
+    for name, title, description in names:
+        md("### " + title + "\n\n" + description)
+        code(ast.get_source_segment(source, nodes[name]))
+
+
+cells = []
+md(
+    intro
+    + "\n## Διάβασε τον κώδικα\n\nΤα επόμενα κελιά είναι κανονικός κώδικας Python, χωρισμένος ανά λειτουργία. Πρώτα φορτώνονται οι βιβλιοθήκες, μετά ορίζονται οι νόμοι κίνησης και τα αρχικά σετ, και στο τέλος εμφανίζονται τα χειριστήρια. Δεν χρειάζεται να αλλάξεις κώδικα για να χρησιμοποιήσεις την εφαρμογή. Εκτέλεσε τα κελιά με τη σειρά ή επίλεξε Εκτέλεση όλων.\n"
+)
+md(
+    "## 1. Βιβλιοθήκες και περιβάλλον\n\nΕλέγχουμε τις εξαρτήσεις και ενεργοποιούμε τα widgets στο Colab, όταν εκτελούμαστε εκεί."
+)
+code(setup)
+code("""from pathlib import Path
+import json
+import numpy as np
+from scipy.integrate import solve_ivp
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+
+# Ζεύγη σωμάτων και απόσταση προστατευτικής διακοπής.
+PAIRS = [(0, 1), (0, 2), (1, 2)]
+R_STOP = 1e-3
+M = np.array([3., 4., 5.])
+""")
+md(
+    "## 2. Βαρύτητα και έλεγχοι\n\nΟ ίδιος νόμος εφαρμόζεται και στις δύο εκδοχές. Οι συναρτήσεις παρακάτω χρησιμοποιούνται από τον υπολογισμό και τα διαγνωστικά."
+)
+extract(
+    "three_body.py",
+    [
+        (
+            "center",
+            "Κέντρο μάζας",
+            "Αφαιρούμε τη θέση ή την ταχύτητα του κέντρου μάζας.",
+        ),
+        (
+            "rhs",
+            "Ο νόμος κίνησης",
+            "Υπολογίζουμε ταχύτητες και επιταχύνσεις από τη νευτώνεια βαρύτητα, με G=1.",
+        ),
+        (
+            "distance",
+            "Πόσο διαφέρουν οι Α και Β;",
+            "Συνδυάζουμε τις διαφορές των αντίστοιχων θέσεων σε ένα μέτρο D.",
+        ),
+        (
+            "invariants",
+            "Ποσότητες που διατηρούνται",
+            "Υπολογίζουμε ενέργεια, ορμή και στροφορμή.",
+        ),
+        (
+            "diagnostics",
+            "Έλεγχος μιας λύσης",
+            "Μετράμε τις μεταβολές των διατηρούμενων ποσοτήτων και τις κοντινές προσεγγίσεις.",
+        ),
+    ],
+)
+md(
+    "## 3. Επτά αρχικά σετ\n\nΚάθε σετ περιέχει μάζες, θέσεις, ταχύτητες και προτεινόμενη διάρκεια."
+)
+extract(
+    "presets.py",
+    [
+        (
+            "make_presets",
+            "Κατασκευή των αρχικών διατάξεων",
+            "Οι περιστρεφόμενες διατάξεις ξεκινούν με τις κατάλληλες αρχικές ταχύτητες.",
+        )
+    ],
+)
+code("""PRESETS = make_presets()
+
+# Ανώτατος επιλέξιμος χρόνος ανά σετ — όρια εξερεύνησης.
+LIMITS = dict(
+    euler_visible=12., euler_long=12., euler=12.,
+    lagrange_stable=60., lagrange_equal=12.,
+    at_rest=3., burrau=20.
+)
+""")
+md("## 4. Ελεγχόμενη αλλαγή και αριθμητική λύση")
+extract(
+    "experiment.py",
+    [
+        (
+            "initial_pair",
+            "Δημιουργία Α και Β",
+            "Η Β δημιουργείται από την Α με αντίθετες μετατοπίσεις και ίδιο αρχικό κέντρο μάζας.",
+        ),
+        (
+            "solve_one",
+            "Επίλυση μιας αρχικής κατάστασης",
+            "Χρησιμοποιούμε προσαρμοστικά βήματα και σταματάμε σε πολύ κοντινή προσέγγιση.",
+        ),
+        (
+            "compare",
+            "Σύγκριση με τρία επίπεδα ακρίβειας",
+            "Υπολογίζουμε το κοινό χρονικό διάστημα, τη διαφορά D και τα κριτήρια αξιοπιστίας.",
+        ),
+    ],
+)
+md("## 5. Εικόνες και κινούμενη απεικόνιση")
+extract(
+    "experiment.py",
+    [
+        (
+            "preview_png",
+            "Προεπισκόπηση αρχικών θέσεων",
+            "Δείχνουμε τις αρχικές θέσεις της Α και της Β πριν από τον υπολογισμό.",
+        ),
+        (
+            "snapshot",
+            "Στατικό αποτέλεσμα",
+            "Σχεδιάζουμε τις τροχιές σε κοινή κλίμακα και το διάγραμμα D.",
+        ),
+    ],
+)
+md(
+    "### Πρότυπο HTML του player\n\nΑυτό το κελί περιέχει HTML και JavaScript σε πολυγραμμικό κείμενο. Δεν είναι ο αριθμητικός κώδικας: σχεδιάζει τις ήδη υπολογισμένες θέσεις και χειρίζεται την αναπαραγωγή. Δεν περιέχει εξωτερικές βιβλιοθήκες."
+)
+player = (s / "player.html").read_text()
+assert "'''" not in player
+code("PLAYER_TEMPLATE = r'''\n" + player + "'''\n")
+extract(
+    "experiment.py",
+    [
+        (
+            "animation_html",
+            "Ενσωμάτωση δεδομένων στην κίνηση",
+            "Επιλέγουμε καρέ από το υπολογισμένο αποτέλεσμα και δημιουργούμε ένα αυτόνομο HTML.",
+        )
+    ],
+)
+md("## 6. Διαδραστικά χειριστήρια")
+extract(
+    "experiment.py",
+    [
+        (
+            "show_experiment",
+            "Σύνδεση των μενού με τον υπολογισμό",
+            "Κάθε αλλαγή ενημερώνει την προεπισκόπηση. Το κουμπί εκτέλεσης υπολογίζει νέες τροχιές και εμφανίζει την κίνηση.",
+        )
+    ],
+)
+md(
+    "## 7. Εκκίνηση\n\nΜε την Εκτέλεση όλων εμφανίζεται αυτόματα η Euler έως t=8. Έπειτα μπορείς να αλλάξεις τις ρυθμίσεις από τα χειριστήρια."
+)
+code("controls = show_experiment(auto_run=True)")
+n = nbformat.v4.new_notebook(
+    cells=cells,
+    metadata={
+        "kernelspec": {
+            "name": "python3",
+            "display_name": "Python 3",
+            "language": "python",
+        },
+        "language_info": {"name": "python"},
+        "colab": {"name": "three_body.ipynb", "provenance": []},
+    },
+)
+import hashlib
+
+for index, cell in enumerate(n.cells):
+    cell.id = hashlib.sha256(
+        (str(index) + ":" + cell.cell_type + ":" + cell.source).encode("utf-8")
+    ).hexdigest()[:12]
+nbformat.validate(n)
+nbformat.write(n, s / "three_body.ipynb")
+print(
+    "Readable notebook:",
+    len(cells),
+    "cells,",
+    sum(c.cell_type == "code" for c in cells),
+    "code cells",
+)

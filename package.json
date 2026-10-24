@@ -1,0 +1,12 @@
+{
+  "name": "three-body-experiment-checks",
+  "private": true,
+  "scripts": {
+    "test:browser": "node tests/check_player.cjs",
+    "format:web": "prettier --write player.html tests/*.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1",
+    "prettier": "^3.0.0"
+  }
+}

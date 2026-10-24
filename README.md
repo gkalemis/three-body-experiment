@@ -2,9 +2,35 @@
 
 Υπολογιστικό πείραμα για μαθητές, συνοδευτικό υλικό για τον «Φυσικό Κόσμο». Συγκρίνουμε δύο αρχικές καταστάσεις Α και Β, αλλάζοντας ελεγχόμενα τις θέσεις στη Β, με ίδιο αρχικό κέντρο μάζας.
 
-**Άνοιγμα στο Colab:** https://colab.research.google.com/github/gkalemis/three-body-experiment/blob/main/three_body.ipynb
+## Δύο εκδόσεις του notebook
 
-**Αποθετήριο:** https://github.com/gkalemis/three-body-experiment
+| Έκδοση | Για ποιον είναι | Άνοιγμα |
+|---|---|---|
+| **Μαθητική — απλή** | Λίγες επιλογές, animation στο επίκεντρο, συμπτυγμένος κώδικας και προαιρετικοί αριθμοί | [Colab για μαθητές](https://colab.research.google.com/github/gkalemis/three-body-experiment/blob/main/three_body_students.ipynb) · [Notebook](three_body_students.ipynb) |
+| **Πλήρης — αναλυτική** | Αναγνώσιμος κώδικας, εξηγήσεις και αναλυτικοί υπολογισμοί | [Colab πλήρους έκδοσης](https://colab.research.google.com/github/gkalemis/three-body-experiment/blob/main/three_body.ipynb) · [Notebook](three_body.ipynb) |
+
+Η πλήρης έκδοση παραμένει ίδια. Η μαθητική έκδοση χρησιμοποιεί τον ίδιο αριθμητικό πυρήνα και τους ίδιους ελέγχους. Στη μαθητική έκδοση πάτησε «Εκτέλεση όλων», περίμενε την εφαρμογή και μετά «Δες τι θα συμβεί». Οι παρακάτω αναλυτικές οδηγίες χειριστηρίων αφορούν την πλήρη έκδοση. Οι σύνδεσμοι της νέας μαθητικής έκδοσης στο GitHub/Colab προϋποθέτουν να ανέβει το νέο αρχείο στο αποθετήριο.
+
+Στο Colab ο κώδικας δηλώνεται ως συμπτυγμένη φόρμα· στο JupyterLab χρησιμοποιούνται οι αντίστοιχες ενδείξεις απόκρυψης πηγής. Η τελική εμφάνιση εξαρτάται από το περιβάλλον notebook. Η απόκρυψη διευκολύνει την παρουσίαση και δεν περιορίζει την πρόσβαση στον κώδικα.
+
+## Άνοιγμα της εφαρμογής
+
+[![Άνοιγμα στο Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gkalemis/three-body-experiment/blob/main/three_body.ipynb)
+
+[![Άνοιγμα στο JupyterLab μέσω Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gkalemis/three-body-experiment/main?labpath=three_body.ipynb)
+
+| Επιλογή | Σύνδεσμος |
+|---|---|
+| Google Colab | [Άνοιξε και εκτέλεσε το notebook στο Colab](https://colab.research.google.com/github/gkalemis/three-body-experiment/blob/main/three_body.ipynb) |
+| JupyterLab μέσω Binder | [Άνοιξε το notebook στο JupyterLab](https://mybinder.org/v2/gh/gkalemis/three-body-experiment/main?labpath=three_body.ipynb) |
+| Αποθετήριο GitHub | [Κώδικας και αρχεία του πειράματος](https://github.com/gkalemis/three-body-experiment) |
+| Notebook στο GitHub | [Προεπισκόπηση του three_body.ipynb](https://github.com/gkalemis/three-body-experiment/blob/main/three_body.ipynb) |
+| Οδηγός μαθητή | [Οδηγίες και προτεινόμενα πειράματα](https://github.com/gkalemis/three-body-experiment/blob/main/student_guide.md) |
+| Αριθμητικοί έλεγχοι | [Αποτελέσματα και περιορισμοί](https://github.com/gkalemis/three-body-experiment/blob/main/numerical_report.md) |
+
+Οι σύνδεσμοι στον πίνακα λειτουργούν και ως εναλλακτική αν δεν εμφανίζονται οι εικόνες των κουμπιών. Η προεπισκόπηση του GitHub δεν εκτελεί το notebook.
+
+Στο Binder περίμενε να δημιουργηθεί το περιβάλλον, άνοιξε το notebook αν δεν ανοίξει αυτόματα και επίλεξε **Run → Run All Cells**. Η πρώτη εκκίνηση μπορεί να καθυστερήσει. Δεν έχει επαληθευτεί ζωντανή εκτέλεση στο Binder. Για JupyterLab στον δικό σου υπολογιστή, ακολούθησε τις οδηγίες εγκατάστασης παρακάτω.
 
 ## Ξεκίνα εδώ
 
@@ -66,26 +92,81 @@
 
 | Αρχείο | Περιεχόμενο |
 |---|---|
-| `three_body.ipynb` | Αυτόνομο διαδραστικό notebook |
-| `three_body.py` | Νευτώνειος αριθμητικός πυρήνας και αρχικό πείραμα Burrau |
-| `presets.py` | Επτά έτοιμα σετ και παλαιότερες λειτουργίες |
-| `experiment.py` | Νέα σύγκριση Α–Β, χειριστήρια και αριθμητικοί έλεγχοι |
-| `player.html` | Πρότυπο κίνησης· για έτοιμη προβολή απαιτείται το παραγόμενο HTML |
-| `build_notebook.py` | Ανακατασκευή του notebook από τις πηγές |
-| `requirements.txt` | Εξαρτήσεις Python |
-| `tests/` | Έλεγχοι αριθμών, callbacks, αυτονομίας και player |
+| [three_body.ipynb](three_body.ipynb) | Αυτόνομο διαδραστικό notebook |
+| [three_body.py](three_body.py) | Νευτώνειος αριθμητικός πυρήνας και αρχικό πείραμα Burrau |
+| [presets.py](presets.py) | Επτά αρχικά σετ και συμβατοί παλαιότεροι αριθμητικοί έλεγχοι |
+| [experiment.py](experiment.py) | Νέα σύγκριση Α–Β, χειριστήρια και αριθμητικοί έλεγχοι |
+| [player.html](player.html) | Πρότυπο κίνησης· για έτοιμη προβολή απαιτείται το παραγόμενο HTML |
+| [build_notebook.py](build_notebook.py) | Ανακατασκευή του notebook από τις πηγές |
+| [requirements.txt](requirements.txt) | Εξαρτήσεις Python |
+| [tests/](tests/) | Έλεγχοι αριθμών, callbacks, αυτονομίας και player |
 
-Από τη ρίζα του αποθετηρίου:
+### JupyterLab στον υπολογιστή σου
+
+Από τη ρίζα του αποθετηρίου, εγκατάστησε τις εξαρτήσεις και το JupyterLab:
 
 ```bash
 python -m pip install -r requirements.txt
+python -m pip install jupyterlab
+python -m jupyterlab
+```
+
+Στο παράθυρο του JupyterLab άνοιξε το `three_body.ipynb` και επίλεξε **Run → Run All Cells**. Χρησιμοποίησε kernel του ίδιου περιβάλλοντος Python στο οποίο εγκατέστησες τις εξαρτήσεις και το ipywidgets.
+
+Αν τροποποιήσεις τις ενσωματωμένες πηγές, ανακατασκεύασε το notebook με:
+
+```bash
 python build_notebook.py
 ```
 
-Η δεύτερη εντολή χρειάζεται μόνο μετά από τροποποίηση των ενσωματωμένων πηγών και αντικαθιστά το notebook. Για τοπική χρήση άνοιξέ το σε Jupyter με υποστήριξη ipywidgets· ενδέχεται να χρειάζεται χωριστή εγκατάσταση JupyterLab.
+Η εντολή αντικαθιστά το notebook και δεν χρειάζεται για τη συνηθισμένη χρήση.
 
 Οι νέες εκτελέσεις γράφουν `checks.json`, `trajectories.npz`, `comparison.png` και `motion.html` στον φάκελο `results/interactive/`. Αντικαθίστανται στην επόμενη εκτέλεση. Στο Colab είναι προσωρινά: κατέβασε όσα χρειάζεσαι πριν κλείσει η συνεδρία.
 
 ## Κατάσταση ελέγχων
 
-Έγιναν 19 αριθμητικές διαμορφώσεις με 108 ολοκληρώσεις, έλεγχοι των Python callbacks, εκτέλεση του notebook σε καθαρό IPython και 26 έλεγχοι του HTML player σε Chromium. Δεν έγινε ζωντανή δοκιμή του frontend μέσα στο Google Colab. Οι ακριβείς περιορισμοί καταγράφονται στο [numerical_report.md](numerical_report.md).
+Στην καθαρισμένη έκδοση επαναλήφθηκαν 19 αριθμητικές διαμορφώσεις με 108 ολοκληρώσεις και 548 assertions, εκτέλεση των 18 κελιών κώδικα σε καθαρό IPython και 26 έλεγχοι του HTML player σε Chromium. Δεν έγινε ζωντανή δοκιμή του frontend μέσα στο Google Colab. Οι ακριβείς περιορισμοί καταγράφονται στο [numerical_report.md](numerical_report.md).
+
+## Έλεγχοι και συντήρηση
+
+Από τη ρίζα του αποθετηρίου:
+
+```bash
+python tests/validate_interactive.py
+python tests/execute_standalone.py
+```
+
+Το πρώτο τεστ παράγει και όλα τα δεδομένα/HTML που χρειάζεται ο έλεγχος browser. Για χωριστό έλεγχο των widgets: `python tests/check_widgets.py`.
+
+Προαιρετικά, για επαλήθευση του player σε Chromium:
+
+```bash
+npm install
+npx playwright install chromium
+npm run test:browser
+```
+
+Τα browser tests εντοπίζουν τα αποτελέσματα σχετικά με τον φάκελο του ίδιου του script, χωρίς εξάρτηση από το όνομα του εξωτερικού φακέλου. Οι εξαρτήσεις Node απαιτούνται μόνο για αυτά τα tests, όχι για την εφαρμογή. Το `player.html` είναι πρότυπο με δείκτη δεδομένων· άνοιξε το παραγόμενο `results/interactive/motion.html` για έτοιμη κίνηση.
+
+Για μορφοποίηση των πηγών και ανακατασκευή του notebook:
+
+```bash
+python -m pip install -r requirements-dev.txt
+python -m black *.py tests/*.py
+npm run format:web
+python build_notebook.py
+```
+
+Το notebook έχει 40 κελιά συνολικά, από τα οποία 18 περιέχουν κανονικό, αναγνώσιμο κώδικα. Ο builder δεν χρησιμοποιεί σειριοποιημένες πηγές μέσα σε `exec` και παράγει σταθερά IDs κελιών. Μετά από αλλαγή στα αρχεία Python ή στο πρότυπο HTML, ανακατασκεύασε και επανέλεγξε το notebook πριν το ανεβάσεις.
+
+## Συντήρηση της μαθητικής έκδοσης
+
+Οι μαθητικές επιλογές ορίζονται στο `student_ui.py`. Για ανακατασκευή των δύο εκδόσεων με τη σωστή σειρά:
+
+```bash
+python build_notebook.py
+python build_student_notebook.py
+python tests/check_student_edition.py
+```
+
+Το `three_body_students.ipynb` περιέχει όλα όσα χρειάζεται και εκτελείται χωρίς συνοδευτικά αρχεία. Η καθαρή προετοιμασία είναι συμπτυγμένη σε ένα κελί και η εκκίνηση σε δεύτερο. Οι προσωπικές μαθητικές εκτελέσεις αποθηκεύονται στο `results/students/` και αντικαθίστανται σε νέα εκτέλεση.

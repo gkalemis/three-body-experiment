@@ -1,15 +1,10 @@
-# Επιστημονικός υπολογισμός και στατικά/κινούμενα γραφήματα.
+# Runtime and standalone notebook generation.
 numpy>=1.26,<3
 scipy>=1.12,<2
 matplotlib>=3.8,<4
-
-# Notebook, πραγματική εκτέλεση σε kernel και διαδραστικό μενού.
-nbformat>=5.9,<6
-nbclient>=0.10,<1
-ipykernel>=6.29,<8
 ipywidgets>=8.1,<9
+nbformat>=5.9,<6
 
-# Δεν χρειάζεται FFmpeg: η κίνηση εξάγεται με Matplotlib.to_jshtml.
-# Τοπικό περιβάλλον JupyterLab: προαιρετική εγκατάσταση jupyterlab χωριστά.
-# Οι ακριβείς εκδόσεις της πραγματικής δοκιμής καταγράφονται στο results/checks.json.
-
+# Optional local notebook interface:
+# python -m pip install jupyterlab
+# Animation uses an embedded Canvas/JavaScript player; no FFmpeg is required.

@@ -1,0 +1,6 @@
+{
+  "assertions": 21,
+  "standalone_ipython": true,
+  "live_colab_tested": false,
+  "live_jupyterlab_frontend_tested": false
+}

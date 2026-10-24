@@ -1,55 +1,154 @@
-const { chromium }=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES ? process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/playwright' : 'playwright');
-const fs=require('fs'),path=require('path');
-(async()=>{
-const packed=process.env.THREE_BODY_PACKED_CHROMIUM ? (await import(process.env.THREE_BODY_PACKED_CHROMIUM)).default : null;
-const browser=await chromium.launch({headless:true,...(process.env.THREE_BODY_CHROMIUM_EXECUTABLE ? {executablePath:process.env.THREE_BODY_CHROMIUM_EXECUTABLE} : {}),args:packed ? packed.args : ['--no-sandbox']});
-const page=await browser.newPage({viewport:{width:1100,height:850}});
-let errors=[],requests=[];page.on('pageerror',e=>errors.push(String(e)));page.on('request',r=>requests.push(r.url()));
-const root=path.resolve('software/results/interactive_validation');
-let checks=0;const assert=(b,msg)=>{if(!b)throw Error(msg);checks++};
-await page.goto('file://'+root+'/case_01/motion.html');
-await page.waitForFunction(()=>window.playerTest);
-assert(await page.locator('#time').getAttribute('max')==='479','frame count');
-assert(await page.evaluate(()=>playerTest.frame)===0,'initial frame');
-await page.locator('#next').click();assert(await page.evaluate(()=>playerTest.frame)===1,'next');
-await page.locator('#prev').click();assert(await page.evaluate(()=>playerTest.frame)===0,'previous');
-await page.locator('#time').fill('240');
-assert(await page.evaluate(()=>playerTest.frame)===240,'scrub');
-assert((await page.locator('#clock').innerText()).includes('Καρέ 241/480'),'clock');
-await page.screenshot({path:root+'/player_mid.png',fullPage:true});
-await page.locator('#play').click();await page.waitForTimeout(450);
-assert(await page.evaluate(()=>playerTest.frame)>240,'play advances');
-await page.locator('#play').click();const frozen=await page.evaluate(()=>playerTest.frame);await page.waitForTimeout(200);
-assert(await page.evaluate(()=>playerTest.frame)===frozen,'pause');
-await page.locator('#speed').selectOption('4');
-await page.locator('#time').fill('478');await page.locator('#play').click();await page.waitForTimeout(250);
-assert(await page.evaluate(()=>playerTest.frame)===479,'stops at end');
-assert(!await page.evaluate(()=>playerTest.playing),'not playing at end');
-await page.screenshot({path:root+'/player_final.png',fullPage:true});
-await page.locator('#loop').check();await page.locator('#time').fill('478');await page.locator('#play').click();await page.waitForTimeout(250);
-assert(await page.evaluate(()=>playerTest.frame)<50,'loop');
-await page.locator('#first').click();assert(await page.evaluate(()=>playerTest.frame)===0,'restart');
-await page.locator('#trails').uncheck();assert(!await page.locator('#trails').isChecked(),'trails toggle');
-assert(errors.length===0,'JS errors: '+errors.join(';'));
-assert(!requests.some(x=>/^https?:/.test(x)),'external network dependency');
-assert(await page.evaluate(()=>playerTest.data.report.numerical_checks_passed),'report');
-// Μικρότερο viewport: canvas εντός του διαθέσιμου πλάτους.
-await page.setViewportSize({width:480,height:850});
-assert(await page.locator('#scene').evaluate(e=>e.getBoundingClientRect().right<=innerWidth),'responsive canvas');
-for(const [file,count] of [['quality_240.html',240],['quality_720.html',720],['case_07/motion.html',480],['case_14/motion.html',480]]){
- await page.goto('file://'+root+'/'+file);await page.waitForFunction(()=>window.playerTest);
- assert(await page.evaluate(()=>playerTest.data.t.length)===count,'quality frame count '+file);
- if(file.startsWith('case_07'))assert(await page.evaluate(()=>playerTest.data.d.every(x=>x===0)),'zero difference animation');
- if(file.startsWith('case_14'))assert((await page.locator('#notice').innerText()).includes('Διακοπή'),'early stop notice');
-}
-const source=fs.readFileSync(root+'/case_01/motion.html','utf8');
-await page.setContent('<iframe title="test" id="embedded" style="width:100%;height:850px"></iframe>');
-await page.locator('#embedded').evaluate((el,source)=>el.srcdoc=source,source);
-const frame=page.frames().find(f=>f!==page.mainFrame());
-await frame.waitForFunction(()=>window.playerTest);
-await frame.locator('#next').click();assert(await frame.evaluate(()=>playerTest.frame)===1,'iframe controls');
-await frame.locator('#play').click();await page.waitForTimeout(200);assert(await frame.evaluate(()=>playerTest.frame)>1,'iframe animation');
-assert(errors.length===0,'JS errors after all players');
-fs.writeFileSync(root+'/browser_checks.json',JSON.stringify({checks,errors,externalRequests:requests.filter(x=>/^https?:/.test(x))},null,2));
-await browser.close();console.log('BROWSER PASSED',checks);
-})().catch(e=>{console.error(e);process.exit(1)});
+const { chromium } = require(
+  process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES
+    ? process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES + "/playwright"
+    : "playwright",
+);
+const fs = require("fs"),
+  path = require("path");
+(async () => {
+  const packed = process.env.THREE_BODY_PACKED_CHROMIUM
+    ? (await import(process.env.THREE_BODY_PACKED_CHROMIUM)).default
+    : null;
+  const browser = await chromium.launch({
+    headless: true,
+    ...(process.env.THREE_BODY_CHROMIUM_EXECUTABLE
+      ? { executablePath: process.env.THREE_BODY_CHROMIUM_EXECUTABLE }
+      : {}),
+    args: packed ? packed.args : ["--no-sandbox"],
+  });
+  const page = await browser.newPage({
+    viewport: { width: 1100, height: 850 },
+  });
+  let errors = [],
+    requests = [];
+  page.on("pageerror", (e) => errors.push(String(e)));
+  page.on("request", (r) => requests.push(r.url()));
+  const root = path.resolve(__dirname, "../results/interactive_validation");
+  let checks = 0;
+  const assert = (b, msg) => {
+    if (!b) throw Error(msg);
+    checks++;
+  };
+  await page.goto("file://" + root + "/case_01/motion.html");
+  await page.waitForFunction(() => window.playerTest);
+  assert(
+    (await page.locator("#time").getAttribute("max")) === "479",
+    "frame count",
+  );
+  assert((await page.evaluate(() => playerTest.frame)) === 0, "initial frame");
+  await page.locator("#next").click();
+  assert((await page.evaluate(() => playerTest.frame)) === 1, "next");
+  await page.locator("#prev").click();
+  assert((await page.evaluate(() => playerTest.frame)) === 0, "previous");
+  await page.locator("#time").fill("240");
+  assert((await page.evaluate(() => playerTest.frame)) === 240, "scrub");
+  assert(
+    (await page.locator("#clock").innerText()).includes("Καρέ 241/480"),
+    "clock",
+  );
+  await page.screenshot({ path: root + "/player_mid.png", fullPage: true });
+  await page.locator("#play").click();
+  await page.waitForTimeout(450);
+  assert((await page.evaluate(() => playerTest.frame)) > 240, "play advances");
+  await page.locator("#play").click();
+  const frozen = await page.evaluate(() => playerTest.frame);
+  await page.waitForTimeout(200);
+  assert((await page.evaluate(() => playerTest.frame)) === frozen, "pause");
+  await page.locator("#speed").selectOption("4");
+  await page.locator("#time").fill("478");
+  await page.locator("#play").click();
+  await page.waitForTimeout(250);
+  assert((await page.evaluate(() => playerTest.frame)) === 479, "stops at end");
+  assert(
+    !(await page.evaluate(() => playerTest.playing)),
+    "not playing at end",
+  );
+  await page.screenshot({ path: root + "/player_final.png", fullPage: true });
+  await page.locator("#loop").check();
+  await page.locator("#time").fill("478");
+  await page.locator("#play").click();
+  await page.waitForTimeout(250);
+  assert((await page.evaluate(() => playerTest.frame)) < 50, "loop");
+  await page.locator("#first").click();
+  assert((await page.evaluate(() => playerTest.frame)) === 0, "restart");
+  await page.locator("#trails").uncheck();
+  assert(!(await page.locator("#trails").isChecked()), "trails toggle");
+  assert(errors.length === 0, "JS errors: " + errors.join(";"));
+  assert(
+    !requests.some((x) => /^https?:/.test(x)),
+    "external network dependency",
+  );
+  assert(
+    await page.evaluate(() => playerTest.data.report.numerical_checks_passed),
+    "report",
+  );
+  // Μικρότερο viewport: canvas εντός του διαθέσιμου πλάτους.
+  await page.setViewportSize({ width: 480, height: 850 });
+  assert(
+    await page
+      .locator("#scene")
+      .evaluate((e) => e.getBoundingClientRect().right <= innerWidth),
+    "responsive canvas",
+  );
+  for (const [file, count] of [
+    ["quality_240.html", 240],
+    ["quality_720.html", 720],
+    ["case_07/motion.html", 480],
+    ["case_14/motion.html", 480],
+  ]) {
+    await page.goto("file://" + root + "/" + file);
+    await page.waitForFunction(() => window.playerTest);
+    assert(
+      (await page.evaluate(() => playerTest.data.t.length)) === count,
+      "quality frame count " + file,
+    );
+    if (file.startsWith("case_07"))
+      assert(
+        await page.evaluate(() => playerTest.data.d.every((x) => x === 0)),
+        "zero difference animation",
+      );
+    if (file.startsWith("case_14"))
+      assert(
+        (await page.locator("#notice").innerText()).includes("Διακοπή"),
+        "early stop notice",
+      );
+  }
+  const source = fs.readFileSync(root + "/case_01/motion.html", "utf8");
+  await page.setContent(
+    '<iframe title="test" id="embedded" style="width:100%;height:850px"></iframe>',
+  );
+  await page
+    .locator("#embedded")
+    .evaluate((el, source) => (el.srcdoc = source), source);
+  const frame = page.frames().find((f) => f !== page.mainFrame());
+  await frame.waitForFunction(() => window.playerTest);
+  await frame.locator("#next").click();
+  assert(
+    (await frame.evaluate(() => playerTest.frame)) === 1,
+    "iframe controls",
+  );
+  await frame.locator("#play").click();
+  await page.waitForTimeout(200);
+  assert(
+    (await frame.evaluate(() => playerTest.frame)) > 1,
+    "iframe animation",
+  );
+  assert(errors.length === 0, "JS errors after all players");
+  fs.writeFileSync(
+    root + "/browser_checks.json",
+    JSON.stringify(
+      {
+        checks,
+        errors,
+        externalRequests: requests.filter((x) => /^https?:/.test(x)),
+      },
+      null,
+      2,
+    ),
+  );
+  await browser.close();
+  console.log("BROWSER PASSED", checks);
+})().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

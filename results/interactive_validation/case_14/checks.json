@@ -1,0 +1,107 @@
+{
+  "case": "at_rest",
+  "requested_end": 3.0,
+  "actual_end": 1.8137907563132203,
+  "stopped_early": true,
+  "direction": "x",
+  "characteristic_length": 2.0,
+  "fraction": 1e-06,
+  "max_shift": 2e-06,
+  "shifts": [
+    [
+      2e-06,
+      0.0
+    ],
+    [
+      -2e-06,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ]
+  ],
+  "com_difference": 0.0,
+  "initial_distance": 1.6329931618789309e-06,
+  "final_distance": 5.950943839212248e-05,
+  "maximum_distance": 5.950943839212248e-05,
+  "final_amplification": 36.44193973454892,
+  "base_reference_difference": 3.6039923165482268e-12,
+  "strict_reference_difference": 3.2126560739290313e-13,
+  "final_signal_error_ratio": 15160644.101667695,
+  "convergence_passed": true,
+  "invariants_passed": true,
+  "difference_resolved": true,
+  "numerical_checks_passed": true,
+  "levels": [
+    {
+      "rtol": 1e-11,
+      "atol": 1e-13,
+      "max_step": 0.03,
+      "A": {
+        "relative_energy_drift": 1.4016601657118601e-08,
+        "absolute_momentum_drift": 1.7763568394002505e-15,
+        "absolute_angular_momentum_drift": 0.0,
+        "com_drift": 0.0,
+        "sampled_min_separation": 0.0010000000000097804,
+        "nfev": 2918,
+        "accepted_steps": 132
+      },
+      "B": {
+        "relative_energy_drift": 5.349035150730156e-09,
+        "absolute_momentum_drift": 1.2809491335957507e-14,
+        "absolute_angular_momentum_drift": 2.888676694086335e-16,
+        "com_drift": 1.822404782968857e-16,
+        "sampled_min_separation": 0.0010000000000025362,
+        "nfev": 3026,
+        "accepted_steps": 136
+      }
+    },
+    {
+      "rtol": 1e-12,
+      "atol": 1e-14,
+      "max_step": 0.015,
+      "A": {
+        "relative_energy_drift": 2.4735222758920376e-09,
+        "absolute_momentum_drift": 8.881784197001252e-16,
+        "absolute_angular_momentum_drift": 0.0,
+        "com_drift": 0.0,
+        "sampled_min_separation": 0.0009999999999970005,
+        "nfev": 3656,
+        "accepted_steps": 206
+      },
+      "B": {
+        "relative_energy_drift": 1.07668165297561e-09,
+        "absolute_momentum_drift": 1.2809491335957507e-14,
+        "absolute_angular_momentum_drift": 7.102849836342507e-16,
+        "com_drift": 5.661048867003676e-16,
+        "sampled_min_separation": 0.0009999999999978028,
+        "nfev": 3596,
+        "accepted_steps": 210
+      }
+    },
+    {
+      "rtol": 1e-13,
+      "atol": 1e-15,
+      "max_step": 0.0075,
+      "A": {
+        "relative_energy_drift": 2.949035090201354e-10,
+        "absolute_momentum_drift": 8.881784197001252e-16,
+        "absolute_angular_momentum_drift": 0.0,
+        "com_drift": 0.0,
+        "sampled_min_separation": 0.0010000000000079904,
+        "nfev": 5192,
+        "accepted_steps": 346
+      },
+      "B": {
+        "relative_energy_drift": 1.051892432857436e-10,
+        "absolute_momentum_drift": 3.8263897345803626e-14,
+        "absolute_angular_momentum_drift": 3.812576822512779e-16,
+        "com_drift": 3.592771976025662e-16,
+        "sampled_min_separation": 0.0009999999999975352,
+        "nfev": 5282,
+        "accepted_steps": 352
+      }
+    }
+  ]
+}

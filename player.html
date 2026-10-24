@@ -1,0 +1,41 @@
+<!doctype html><html lang="el"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Τρία σώματα — σύγκριση Α και Β</title>
+<style>body{font:15px system-ui,sans-serif;margin:12px;color:#182333;background:#fff}canvas{width:100%;height:auto;border:1px solid #ccd5dd;border-radius:6px}button,select{font:inherit;padding:6px;margin:3px}input[type=range]{width:98%}.controls{display:flex;flex-wrap:wrap;align-items:center;gap:5px}#notice{color:#8a3600}p{margin:7px 0}</style>
+<h3>Α και Β: κοινός χρόνος, ίδια κλίμακα</h3><p id="notice"></p><canvas id="scene" width="960" height="440" aria-label="Κίνηση των τριών σωμάτων στις εκδοχές Α και Β"></canvas>
+<div class="controls"><button id="first" aria-label="Αρχή">⏮ Αρχή</button><button id="prev" aria-label="Προηγούμενο καρέ">◀|</button><button id="play">▶ Αναπαραγωγή</button><button id="next" aria-label="Επόμενο καρέ">|▶</button><label>Ταχύτητα <select id="speed"><option value=".5">0,5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select></label><label><input type="checkbox" id="loop"> Επανάληψη</label><label><input type="checkbox" id="trails" checked> Ίχνη</label></div>
+<input id="time" type="range" min="0" value="0" step="1" aria-label="Χρόνος μοντέλου"><p id="clock" aria-live="off"></p><canvas id="chart" width="960" height="130" aria-label="Διάγραμμα διαφοράς Α και Β με δείκτη χρόνου"></canvas><p>Σώμα 1: μπλε · Σώμα 2: πορτοκαλί · Σώμα 3: πράσινο · + κέντρο μάζας. Ο χρόνος μοντέλου διαφέρει από τα δευτερόλεπτα προβολής. Πολύ σύντομα γεγονότα μπορεί να μη φαίνονται ανάμεσα στα καρέ. Η απόκλιση μόνη της δεν αποδεικνύει χάος.</p>
+<script>
+'use strict';
+const data=/*DATA*/;
+const $=id=>document.getElementById(id), ctx=$('scene').getContext('2d'), chart=$('chart').getContext('2d');
+const n=data.t.length, colors=['#0072B2','#D55E00','#009E73'];
+let k=0,playing=false,last=null,acc=0;
+$('time').max=n-1;
+let xmin=Infinity,xmax=-Infinity,ymin=Infinity,ymax=-Infinity;
+for(const run of [data.a,data.b])for(const row of run)for(let i=0;i<3;i++){xmin=Math.min(xmin,row[2*i]);xmax=Math.max(xmax,row[2*i]);ymin=Math.min(ymin,row[2*i+1]);ymax=Math.max(ymax,row[2*i+1]);}
+const cx=(xmin+xmax)/2,cy=(ymin+ymax)/2,half=Math.max(xmax-xmin,ymax-ymin,.2)*.56;
+const panels=[{x:55,y:48,w:370},{x:535,y:48,w:370}];
+const point=(p,x,y)=>[p.x+p.w/2+(x-cx)*p.w/(2*half),p.y+p.w/2-(y-cy)*p.w/(2*half)];
+function draw(){
+ ctx.clearRect(0,0,960,440);ctx.font='17px sans-serif';ctx.lineWidth=1;
+ [data.a,data.b].forEach((run,j)=>{const p=panels[j];ctx.fillStyle='#182333';ctx.fillText(j?'Εκδοχή Β':'Εκδοχή Α',p.x,p.y-20);ctx.strokeStyle='#9eabb7';ctx.strokeRect(p.x,p.y,p.w,p.w);
+ const [ox,oy]=point(p,0,0);ctx.strokeStyle='#555';ctx.beginPath();ctx.moveTo(ox-6,oy);ctx.lineTo(ox+6,oy);ctx.moveTo(ox,oy-6);ctx.lineTo(ox,oy+6);ctx.stroke();
+ ctx.font='12px sans-serif';ctx.fillText('x: '+(cx-half).toFixed(2)+' … '+(cx+half).toFixed(2)+'   y: '+(cy-half).toFixed(2)+' … '+(cy+half).toFixed(2),p.x,p.y+p.w+17);
+ for(let i=0;i<3;i++){if($('trails').checked){ctx.strokeStyle=colors[i];ctx.globalAlpha=.4;ctx.beginPath();for(let f=0;f<=k;f++){const q=point(p,run[f][i*2],run[f][i*2+1]);if(f===0)ctx.moveTo(...q);else ctx.lineTo(...q);}ctx.stroke();ctx.globalAlpha=1;}
+ const q=point(p,run[k][i*2],run[k][i*2+1]);ctx.fillStyle=colors[i];ctx.beginPath();ctx.arc(...q,5.5,0,2*Math.PI);ctx.fill();}
+ });
+ $('time').value=k;$('clock').textContent=`Χρόνος μοντέλου t = ${data.t[k].toFixed(5)} / ${data.t[n-1].toFixed(5)} μονάδες χρόνου | Διαφορά D = ${data.d[k].toExponential(3)} | Καρέ ${k+1}/${n}`;
+ chart.clearRect(0,0,960,130);const maxD=Math.max(...data.d,1e-15);chart.strokeStyle='#223344';chart.beginPath();data.d.forEach((d,i)=>{const x=55+850*data.t[i]/data.t[n-1],y=100-75*d/maxD;if(i)chart.lineTo(x,y);else chart.moveTo(x,y);});chart.stroke();const x=55+850*data.t[k]/data.t[n-1];chart.strokeStyle='#c33232';chart.beginPath();chart.moveTo(x,20);chart.lineTo(x,105);chart.stroke();chart.fillStyle='#182333';chart.font='14px sans-serif';chart.fillText('D: 0 … '+maxD.toExponential(2)+' (γραμμική κλίμακα)',55,15);chart.fillText('t = 0',55,124);chart.fillText('t = '+data.t[n-1].toFixed(3),810,124);
+}
+function pause(){playing=false;last=null;acc=0;$('play').textContent='▶ Αναπαραγωγή';}
+function step(d){pause();k=Math.max(0,Math.min(n-1,k+d));draw();}
+$('play').onclick=()=>{if(playing){pause();return;}if(k===n-1)k=0;playing=true;last=null;$('play').textContent='Ⅱ Παύση';draw();};
+$('first').onclick=()=>{pause();k=0;draw();};$('prev').onclick=()=>step(-1);$('next').onclick=()=>step(1);
+$('time').oninput=()=>{pause();k=Number($('time').value);draw();};$('trails').onchange=draw;
+// 30 δευτερόλεπτα για όλο το διάστημα στην ταχύτητα 1×, ανεξάρτητα από τα καρέ.
+function tick(now){if(playing){if(last!==null){acc+=Math.min(now-last,250)*Number($('speed').value);const advance=Math.floor(acc/(30000/(n-1)));if(advance){acc-=advance*(30000/(n-1));k+=advance;if(k>=n){if($('loop').checked)k=k%n;else{k=n-1;pause();}}draw();}}last=now;}requestAnimationFrame(tick);}
+const r=data.report;
+$('notice').textContent=(r.stopped_early?`Διακοπή σε κοντινή προσέγγιση: ζητήθηκε t=${r.requested_end}, υπολογίστηκε έως t=${r.actual_end.toFixed(8)}. `:'')+(!r.numerical_checks_passed?'Τα κριτήρια ακρίβειας δεν ικανοποιήθηκαν. Η εικόνα είναι διερευνητική.':'Οι αριθμητικοί έλεγχοι ικανοποιήθηκαν.');
+$('notice').style.color=r.numerical_checks_passed&&!r.stopped_early?'#17613c':'#8a3600';
+draw();requestAnimationFrame(tick);
+window.playerTest={get frame(){return k},get playing(){return playing},data,panels,half};
+</script></html>

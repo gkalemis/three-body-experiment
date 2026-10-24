@@ -1,0 +1,22 @@
+0 euler_visible 1e-06 x 8.0 -> 8.0 D 0.8597227370768369 checks True
+1 euler_long 1e-06 x 12.0 -> 12.0 D 2.399636557348862 checks True
+2 lagrange_stable 1e-06 x 30.0 -> 30.0 D 3.443637774468335e-07 checks True
+3 lagrange_equal 1e-06 x 10.0 -> 10.0 D 4.541548112000101e-05 checks True
+4 euler 1e-06 x 6.0 -> 6.0 D 0.06304652669943511 checks True
+5 at_rest 1e-06 x 1.4 -> 1.4 D 1.9880995297461576e-06 checks True
+6 burrau 1e-06 x 15.8 -> 15.8 D 3.261936738888407e-05 checks True
+7 euler_long 0 x 12 -> 12.0 D 0.0 checks True
+8 euler_long 1e-08 x 12 -> 12.0 D 1.8846640070897764 checks True
+9 euler_long 1e-06 y 12 -> 12.0 D 2.4194637288626586 checks True
+10 euler_long 0.01 x 12 -> 12.0 D 2.475763350001533 checks True
+11 euler_long 0.1 y 12 -> 12.0 D 2.5034706846181134 checks True
+12 lagrange_stable 1e-06 x 60 -> 60.0 D 5.920514600741151e-07 checks True
+13 lagrange_equal 1e-06 y 12 -> 12.0 D 0.0001062353192062364 checks True
+14 at_rest 1e-06 x 3 -> 1.8137907563132203 D 5.950943839212248e-05 checks True
+15 at_rest 0 x 3 -> 1.8137907563132203 D 0.0 checks True
+16 burrau 1e-06 y 15.8 -> 15.8 D 3.787880414172511e-05 checks True
+17 burrau 0.01 x 20 -> 15.829913316997157 D 0.3136164728562764 checks True
+18 euler 1e-08 x 0.05 -> 0.05 D 8.217307197850034e-09 checks True
+[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K/root/.local/lib/python3.12/site-packages/IPython/core/display.py:448: UserWarning: Consider using IPython.display.IFrame instead
+  warnings.warn("Consider using IPython.display.IFrame instead")
+[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2K[2KCOMPLETE 545 assertions 19 configurations

@@ -160,3 +160,4 @@ def plot(t, a, b, delta, differences, out):
 if __name__ == '__main__':
     _, _, _, report = run()
     print(json.dumps(report, ensure_ascii=False, indent=2))
+

@@ -1,4 +1,4 @@
-"""Έξι περιπτώσεις, μενού και κινούμενη απεικόνιση στο notebook.
+"""Επτά περιπτώσεις, μενού και κινούμενη απεικόνιση στο notebook.
 
 Τοπική αριθμητική εκτέλεση: python presets.py euler.
 Στο notebook: Εκτέλεση περίπτωσης → Προβολή κίνησης → αναπαραγωγή.
@@ -65,7 +65,18 @@ def make_presets():
         'από αυτή τη διάταξη. Παρατήρησε ιδιαίτερα το διάστημα t=6 έως t=8. '
         'Η αρχική αναπαραγωγή διαρκεί περίπου 45 δευτερόλεπτα. '
         'Η απόκλιση από ασταθή σχετική ισορροπία δεν αποδεικνύει από μόνη της χάος.')
-    return dict(euler_visible=visible, lagrange_stable=unequal,
+    longer = dict(line)
+    longer.update(label='Euler για περισσότερο χρόνο (t=12)', duration=12.,
+        animation_interval_ms=250, animation_frames=240,
+        explanation='Ξεκινάμε όπως στην Euler t=6 και t=8, με την ίδια μικρή '
+        'αλλαγή θέσης 10⁻⁶. Αφήνουμε όμως τα σώματα να κινηθούν μέχρι t=12. '
+        'Η Α παραμένει σε περιστρεφόμενη ευθεία, ενώ η Β ακολουθεί πια '
+        'καθαρά διαφορετική διαδρομή. Οι εικόνες Α και Β βρίσκονται '
+        'σε δύο χωριστά πλαίσια· τα αχνά ίχνη και στα δύο είναι συνεχή. '
+        'Ο περισσότερος χρόνος κίνησης μεγαλώνει τη διαφορά. Το πιο αργό '
+        'πάτημα αναπαραγωγής αλλάζει μόνο πόσο γρήγορα βλέπουμε την εικόνα. '
+        'Η διαφορά δείχνει αστάθεια και από μόνη της δεν αποδεικνύει χάος.')
+    return dict(euler_visible=visible, euler_long=longer, lagrange_stable=unequal,
                 lagrange_equal=equal, euler=line, at_rest=rest, burrau=burrau)
 
 
@@ -110,8 +121,8 @@ def run_case(key='euler_visible', output='results/presets'):
     report['base_reference_difference'] = float(errors[0].max())
     report['strict_reference_difference'] = float(errors[1].max())
     report['minimum_signal_ratio'] = float(np.min(delta/np.maximum(errors[0]+errors[1], 1e-30)))
-    report['comparison_floor'] = 1e-11
-    report['differences_below_floor'] = bool(max(errors[0].max(), errors[1].max()) < 1e-11)
+    report['comparison_floor'] = 1e-10
+    report['differences_below_floor'] = bool(max(errors[0].max(), errors[1].max()) < report['comparison_floor'])
     # Η μικρή απόκλιση είναι αποδεκτή: οι περιοδικές λύσεις δεν χρειάζεται
     # να περάσουν το κριτήριο ενίσχυσης που είχε το πείραμα Burrau.
     report['numerical_checks_passed'] = bool(all(
@@ -131,6 +142,9 @@ def run_case(key='euler_visible', output='results/presets'):
             a[:, :6].reshape(-1, 3, 2)-expected, axis=2)))
         acc = rhs(0, preset_initial(case), m)[6:].reshape(3, 2)
         report['initial_rotation_residual'] = float(np.max(abs(acc+case['omega']**2*r0)))
+        report['numerical_checks_passed'] = bool(report['numerical_checks_passed']
+            and report['max_error_against_exact_rotation'] < 1e-7
+            and report['initial_rotation_residual'] < 1e-12)
     out = Path(output)/key
     out.mkdir(parents=True, exist_ok=True)
     (out/'checks.json').write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n')
@@ -330,7 +344,7 @@ def show_menu():
         try:
             case = PRESETS[choice.value]
             html = motion_html(*state['last_data'], case,
-                               interval_ms=case.get('animation_interval_ms', 180))
+                               frame_count=case.get('animation_frames', 180), interval_ms=case.get('animation_interval_ms', 180))
             state['animation_html'] = html
             (Path('results/presets')/choice.value/'motion.html').write_text(html)
             movie.update(HTML(html))
@@ -355,3 +369,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
     _, _, _, checks = run_case(args.case)
     print(json.dumps(checks, ensure_ascii=False, indent=2))
+

@@ -96,7 +96,7 @@ def show_student_experiment(auto_run=True):
         png, _ = preview_png(choice.value, change.value, direction.value)
         with preview:
             preview.clear_output(wait=True)
-            display(Image(data=png))
+            display(Image(data=png, width=560))
 
     def invalidate(event=None):
         if guarded[0]:
@@ -132,7 +132,7 @@ def show_student_experiment(auto_run=True):
         with movie:
             movie.clear_output(wait=True)
             display(IFrame(
-                src="about:blank", width="100%", height=820,
+                src="about:blank", width="100%", height=600,
                 extras=[
                     'title="Παρατήρησε Α και Β"',
                     'style="border:0"',

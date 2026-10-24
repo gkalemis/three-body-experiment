@@ -185,7 +185,8 @@ def preview_png(key, fraction, direction):
     import io
 
     a, b, meta = initial_pair(key, fraction, direction)
-    fig, ax = plt.subplots(figsize=(7, 3.3), layout="constrained")
+    fig, ax = plt.subplots(figsize=(5.6, 3.2))
+    fig.subplots_adjust(left=0.12, right=0.98, top=0.84, bottom=0.32)
     colors = ["#0072B2", "#D55E00", "#009E73"]
     for i, color in enumerate(colors):
         ax.plot(
@@ -201,8 +202,19 @@ def preview_png(key, fraction, direction):
     ax.set(
         xlabel="x", ylabel="y", title="Αρχικές θέσεις — ίδια κλίμακα", aspect="equal"
     )
+    # Keep collinear configurations readable without changing the physical data.
+    positions = np.concatenate((a[:6].reshape(3, 2), b[:6].reshape(3, 2)))
+    low, high = positions.min(axis=0), positions.max(axis=0)
+    midpoint = (low + high) / 2
+    span = np.maximum(high - low, max(float(np.max(high - low)), 0.1) * 0.5)
+    half = span * 0.65
+    ax.set_xlim(midpoint[0] - half[0], midpoint[0] + half[0])
+    ax.set_ylim(midpoint[1] - half[1], midpoint[1] + half[1])
+    ax.tick_params(labelsize=8)
     ax.grid(alpha=0.2)
-    ax.legend(fontsize=8, loc="best")
+    handles, labels = ax.get_legend_handles_labels()
+    fig.legend(handles, labels, loc="lower center", ncol=2,
+               bbox_to_anchor=(0.5, 0.01), fontsize=7.5, frameon=False)
     buf = io.BytesIO()
     fig.savefig(buf, format="png", dpi=110)
     plt.close(fig)
@@ -210,7 +222,7 @@ def preview_png(key, fraction, direction):
 
 
 def snapshot(result, path):
-    fig, axes = plt.subplots(1, 3, figsize=(12, 3.7), layout="constrained")
+    fig, axes = plt.subplots(1, 3, figsize=(9.5, 3.0), layout="constrained")
     arrays = [
         result["A"][:, :6].reshape(-1, 3, 2),
         result["B"][:, :6].reshape(-1, 3, 2),
@@ -363,7 +375,7 @@ def show_experiment(auto_run=False):
         png, meta = preview_png(choice.value, fraction(), direction.value)
         with preview:
             preview.clear_output(wait=True)
-            display(Image(data=png))
+            display(Image(data=png, width=560))
             display(
                 Markdown(
                     f"Μεγαλύτερη μετατόπιση: **{meta['max_shift']:.3e}** μονάδες μήκους. Διαφορά κέντρων μάζας: **{meta['com_difference']:.2e}**. Οι ταχύτητες δεν αλλάζουν· η ενέργεια μπορεί να αλλάζει."
@@ -425,7 +437,7 @@ def show_experiment(auto_run=False):
 
             display(
                 IFrame(
-                    src="about:blank", width="100%", height=850,
+                    src="about:blank", width="100%", height=650,
                     extras=[
                         'title="Κίνηση Α και Β"',
                         'style="border:0"',
@@ -474,7 +486,7 @@ def show_experiment(auto_run=False):
                         + " Η απόκλιση από μόνη της δεν αποδεικνύει χάος."
                     )
                 )
-                display(Image(filename="results/interactive/comparison.png"))
+                display(Image(filename="results/interactive/comparison.png", width=760))
                 display(
                     FileLink(
                         "results/interactive/checks.json",

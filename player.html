@@ -7,9 +7,10 @@
   <style>
     body {
       font:
-        15px system-ui,
+        14px system-ui,
         sans-serif;
-      margin: 12px;
+      margin: 8px;
+      max-width: 720px;
       color: #182333;
       background: #fff;
     }
@@ -19,11 +20,21 @@
       border: 1px solid #ccd5dd;
       border-radius: 6px;
     }
+    #scene, #chart {
+      max-width: 680px;
+    }
+    h3 {
+      font-size: 16px;
+      margin: 4px 0 6px;
+    }
+    @media (max-height: 500px) {
+      #scene { max-width: 580px; }
+    }
     button,
     select {
       font: inherit;
-      padding: 6px;
-      margin: 3px;
+      padding: 4px;
+      margin: 2px;
     }
     input[type="range"] {
       width: 98%;
@@ -32,13 +43,13 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
     }
     #notice {
       color: #8a3600;
     }
     p {
-      margin: 7px 0;
+      margin: 5px 0;
     }
   </style>
   <h3>Α και Β: κοινός χρόνος, ίδια κλίμακα</h3>

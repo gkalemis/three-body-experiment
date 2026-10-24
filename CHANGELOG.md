@@ -18,3 +18,11 @@ No live Colab or Binder frontend session was tested. Python widget callbacks and
 ## Notebook embedding correction
 
 Replaced HTML-wrapped iframe markup with the native IPython.display.IFrame class, retaining inline srcdoc data. Both notebook editions were rebuilt. The student edition passed its 21 assertions with UserWarning treated as an error. The full notebook and its actual Euler t=12 and zero-change callbacks also passed under that setting. Native iframe markup was checked separately. No live Binder/Colab session was tested, and numerical integration settings were unchanged.
+
+## Compact plots
+
+Reduced preview and static figure sizes, limited animation canvases to 680 CSS pixels, and reduced embedded frame heights to 650 pixels (full) and 600 pixels (students). Numerical data and the common A/B scale are unchanged. Both notebooks passed standalone execution; the student edition passed 21 assertions. Chromium checks at 1000×650 and 1000×600 confirmed the play controls and time slider are visible without scrolling inside the player, and playback advances. This does not guarantee that the entire notebook, including all introductory text, fits every screen.
+
+## Initial-position preview layout
+
+Moved the preview legend outside the axes, below the x label, and reserved its own margin. Added a minimum visual span for collinear configurations while retaining equal x/y scales. Rendered all seven presets in both perturbation directions (14 combinations); visually inspected Euler and triangular configurations. Initial positions and numerical dynamics are unchanged.
